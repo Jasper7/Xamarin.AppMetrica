@@ -11,10 +11,10 @@ using System.Runtime.CompilerServices;
 
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Jasper")]
+[assembly: AssemblyCompany("Jasper Developer")]
 [assembly: AssemblyProduct("AppMetrica")]
 [assembly: AssemblyCopyright("Jasper Developer")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
-[assembly: AssemblyVersion("3.7.1")]
+[assembly: AssemblyVersion("3.15.1")]

@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
-VisualStudioVersion = 16.0.810.10
+VisualStudioVersion = 16.0.810.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YandexMetrica.Xamarin.iOSBinding", "YandexMetrica.Xamarin.iOSBinding.csproj", "{31A0AF42-B113-40E3-9F0F-9CE6C9D0301A}"
 EndProject
@@ -20,6 +20,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {3F8ACF5C-BA9C-46D9-A989-6A4B0F6662B1}
+		SolutionGuid = {4E3CD2CC-05C0-4140-8F9D-90699AAF89C8}
 	EndGlobalSection
 EndGlobal

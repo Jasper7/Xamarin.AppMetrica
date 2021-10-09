@@ -4,11 +4,15 @@ set -e
 
 METRICA_PROJ_FILE=YandexMetrica.Xamarin.iOSBinding.csproj
 
-pod repo update master
+pod repo update
 
 METRICA_OLD_VER=$(sed -n -e "s,.*<NativeAppMetricaSdkVersion>\(.*\)</NativeAppMetricaSdkVersion>.*,\1,p" "$METRICA_PROJ_FILE")
 METRICA_SPEC=$(pod spec cat YandexMobileMetrica)
 METRICA_NEW_VER=$(echo "$METRICA_SPEC" | python -c 'import json,sys;print(json.load(sys.stdin)["version"])')
+
+echo " ====== path ====="
+echo "${METRICA_NEW_VER}"
+echo " ====== path ====="
 
 if [[ "$METRICA_OLD_VER" == "$METRICA_NEW_VER" ]]; then
     echo "AppMetrica is up to date (v$METRICA_OLD_VER)"
@@ -31,8 +35,8 @@ unzip -q framework.zip
 
 echo "Copying library and headers from framework"
 copy_library_and_headers_from_framework() { #1 - framework name
-	cp "static/$1.framework/$1" "../Libs/lib$1-${METRICA_NEW_VER}.a"
-	cp -r "static/$1.framework/Headers" "../Headers/$1"
+	cp "ios/static/$1.framework/$1" "../Libs/lib$1-${METRICA_NEW_VER}.a"
+	cp -r "ios/static/$1.framework/Headers" "../Headers/$1"
 }
 rm -rf ../Headers && mkdir ../Headers
 rm -rf ../Libs && mkdir ../Libs

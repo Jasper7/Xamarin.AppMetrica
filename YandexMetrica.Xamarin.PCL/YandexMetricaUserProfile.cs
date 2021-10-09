@@ -46,7 +46,7 @@ namespace YandexMetricaPCL
     {
         IYandexMetricaBirthDateAttribute BirthDate();
 
-        IYandexMetricaGenderAttribute Gender();
+        //IYandexMetricaGenderAttribute Gender();
 
         IYandexMetricaNameAttribute Name();
 
@@ -148,10 +148,10 @@ namespace YandexMetricaPCL
             return Implementation.BirthDate();
         }
 
-        public static IYandexMetricaGenderAttribute Gender()
-        {
-            return Implementation.Gender();
-        }
+        //public static IYandexMetricaGenderAttribute Gender()
+        //{
+        //    return Implementation.Gender();
+        //}
 
         public static IYandexMetricaNameAttribute Name()
         {

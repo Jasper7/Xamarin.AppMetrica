@@ -1,0 +1,13 @@
+workspace 'MobileMetricaSample.xcworkspace'
+project 'MobileMetricaSample.xcodeproj'
+platform :ios, '14.0'
+
+target :MobileMetricaSample do
+    project 'MobileMetricaSample.xcodeproj'
+    pod 'YandexMobileMetrica', '3.15.1'
+end
+
+target :MobileMetricaSampleToday do
+    project 'MobileMetricaSample.xcodeproj'
+    pod 'YandexMobileMetrica', '3.15.1'
+end

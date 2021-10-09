@@ -23,10 +23,10 @@ namespace YandexMetricaIOS
             return new YandexMetricaBirthDateAttributeImplementation(YMMProfileAttribute.BirthDate());
         }
 
-        public IYandexMetricaGenderAttribute Gender()
-        {
-            return new YandexMetricaGenderAttributeImplementation(YMMProfileAttribute.Gender());
-        }
+        //public IYandexMetricaGenderAttribute Gender()
+        //{
+        //    return new YandexMetricaGenderAttributeImplementation(YMMProfileAttribute.Gender());
+        //}
 
         public IYandexMetricaNameAttribute Name()
         {
@@ -70,22 +70,22 @@ namespace YandexMetricaIOS
 
         public IYandexMetricaUserProfileUpdate WithAge(int age)
         {
-            return new YandexMetricaUserProfileUpdateImplementation(_native.WithAge((nuint)age));
+            return new YandexMetricaUserProfileUpdateImplementation(_native.WithAge((uint)age));
         }
 
         public IYandexMetricaUserProfileUpdate WithBirthDate(int year)
         {
-            return new YandexMetricaUserProfileUpdateImplementation(_native.WithBirthDate((nuint)year));
+            return new YandexMetricaUserProfileUpdateImplementation(_native.WithYear((nuint)year));
         }
 
         public IYandexMetricaUserProfileUpdate WithBirthDate(int year, int month)
         {
-            return new YandexMetricaUserProfileUpdateImplementation(_native.WithBirthDate((nuint)year, (nuint)month));
+            return new YandexMetricaUserProfileUpdateImplementation(_native.WithYear((nuint)year, (nuint)month));
         }
 
         public IYandexMetricaUserProfileUpdate WithBirthDate(int year, int month, int day)
         {
-            return new YandexMetricaUserProfileUpdateImplementation(_native.WithBirthDate((nuint)year, (nuint)month, (nuint)day));
+            return new YandexMetricaUserProfileUpdateImplementation(_native.WithYear((nuint)year, (nuint)month, (nuint)day));
         }
 
         public IYandexMetricaUserProfileUpdate WithBirthDate(DateTime date)
@@ -99,44 +99,48 @@ namespace YandexMetricaIOS
         }
     }
 
-    class YandexMetricaGenderAttributeImplementation : IYandexMetricaGenderAttribute
-    {
-        private readonly IYMMGenderAttribute _native;
+    //class YandexMetricaGenderAttributeImplementation : IYandexMetricaGenderAttribute
+    //{
+    //    //private readonly YMMGenderAttribute _native;
 
-        public YandexMetricaGenderAttributeImplementation(IYMMGenderAttribute native)
-        {
-            _native = native;
-        }
+    //    //public YandexMetricaGenderAttributeImplementation(YMMGenderAttribute native)
+    //    //{
+    //    //    _native = native;
+    //    //}
 
-        public IYandexMetricaUserProfileUpdate WithValue(YandexMetricaGender value)
-        {
-            return new YandexMetricaUserProfileUpdateImplementation(_native.WithValue(GetIOSGender(value)));
-        }
+    //    public YandexMetricaGenderAttributeImplementation()
+    //    {
+    //    }
 
-        public IYandexMetricaUserProfileUpdate WithValueReset()
-        {
-            return new YandexMetricaUserProfileUpdateImplementation(_native.WithValueReset());
-        }
+    //    public IYandexMetricaUserProfileUpdate WithValue(YandexMetricaGender value)
+    //    {
+    //        return new YandexMetricaUserProfileUpdateImplementation(_native.WithValue(GetIOSGender(value)));
+    //    }
 
-        private YMMGenderType GetIOSGender(YandexMetricaGender gender)
-        {
-            switch (gender)
-            {
-                case YandexMetricaGender.FEMALE:
-                    return YMMGenderType.Female;
-                case YandexMetricaGender.MALE:
-                    return YMMGenderType.Male;
-                default:
-                    return YMMGenderType.Other;
-            }
-        }
-    }
+    //    public IYandexMetricaUserProfileUpdate WithValueReset()
+    //    {
+    //        return new YandexMetricaUserProfileUpdateImplementation(_native.WithValueReset());
+    //    }
+
+    //    private YMMGenderType GetIOSGender(YandexMetricaGender gender)
+    //    {
+    //        switch (gender)
+    //        {
+    //            case YandexMetricaGender.FEMALE:
+    //                return YMMGenderType.Female;
+    //            case YandexMetricaGender.MALE:
+    //                return YMMGenderType.Male;
+    //            default:
+    //                return YMMGenderType.Other;
+    //        }
+    //    }
+    //}
 
     class YandexMetricaNameAttributeImplementation : IYandexMetricaNameAttribute
     {
-        private readonly IYMMNameAttribute _native;
+        private readonly YMMNameAttribute _native;
 
-        public YandexMetricaNameAttributeImplementation(IYMMNameAttribute native)
+        public YandexMetricaNameAttributeImplementation(YMMNameAttribute native)
         {
             _native = native;
         }
@@ -154,9 +158,9 @@ namespace YandexMetricaIOS
 
     class YandexMetricaNotificationsEnabledAttributeImplementation : IYandexMetricaNotificationsEnabledAttribute
     {
-        private readonly IYMMNotificationsEnabledAttribute _native;
+        private readonly YMMNotificationsEnabledAttribute _native;
 
-        public YandexMetricaNotificationsEnabledAttributeImplementation(IYMMNotificationsEnabledAttribute native)
+        public YandexMetricaNotificationsEnabledAttributeImplementation(YMMNotificationsEnabledAttribute native)
         {
             _native = native;
         }
@@ -174,9 +178,9 @@ namespace YandexMetricaIOS
 
     class YandexMetricaBooleanAttributeImplementation : IYandexMetricaBooleanAttribute
     {
-        private readonly IYMMCustomBoolAttribute _native;
+        private readonly YMMCustomBoolAttribute _native;
 
-        public YandexMetricaBooleanAttributeImplementation(IYMMCustomBoolAttribute native)
+        public YandexMetricaBooleanAttributeImplementation(YMMCustomBoolAttribute native)
         {
             _native = native;
         }
@@ -199,9 +203,9 @@ namespace YandexMetricaIOS
 
     class YandexMetricaCounterAttributeImplementation : IYandexMetricaCounterAttribute
     {
-        private readonly IYMMCustomCounterAttribute _native;
+        private readonly YMMCustomCounterAttribute _native;
 
-        public YandexMetricaCounterAttributeImplementation(IYMMCustomCounterAttribute native)
+        public YandexMetricaCounterAttributeImplementation(YMMCustomCounterAttribute native)
         {
             _native = native;
         }
@@ -214,9 +218,9 @@ namespace YandexMetricaIOS
 
     class YandexMetricaNumberAttributeImplementation : IYandexMetricaNumberAttribute
     {
-        private readonly IYMMCustomNumberAttribute _native;
+        private readonly YMMCustomNumberAttribute _native;
 
-        public YandexMetricaNumberAttributeImplementation(IYMMCustomNumberAttribute native)
+        public YandexMetricaNumberAttributeImplementation(YMMCustomNumberAttribute native)
         {
             _native = native;
         }
@@ -239,9 +243,9 @@ namespace YandexMetricaIOS
 
     class YandexMetricaStringAttributeImplementation : IYandexMetricaStringAttribute
     {
-        private readonly IYMMCustomStringAttribute _native;
+        private readonly YMMCustomStringAttribute _native;
 
-        public YandexMetricaStringAttributeImplementation(IYMMCustomStringAttribute native)
+        public YandexMetricaStringAttributeImplementation(YMMCustomStringAttribute native)
         {
             _native = native;
         }
@@ -262,7 +266,7 @@ namespace YandexMetricaIOS
         }
     }
 
-    class YandexMetricaUserProfileUpdateImplementation : IYandexMetricaUserProfileUpdate
+    public class YandexMetricaUserProfileUpdateImplementation : IYandexMetricaUserProfileUpdate
     {
         private readonly YMMUserProfileUpdate _native;
 

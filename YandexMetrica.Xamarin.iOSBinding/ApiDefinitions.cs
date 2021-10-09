@@ -1,11 +1,3 @@
-/*
- * Version for Xamarin
- * © 2015-2019 YANDEX
- * You may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * https://yandex.com/legal/appmetrica_sdk_agreement/
- */
-
 using System;
 using CoreFoundation;
 using CoreLocation;
@@ -20,10 +12,43 @@ namespace YandexMetricaIOS
 	[Static]
 	partial interface Constants
 	{
+		// extern const NSErrorUserInfoKey _Nonnull YMMBacktraceErrorKey;
+		[Field ("YMMBacktraceErrorKey", "__Internal")]
+		NSString YMMBacktraceErrorKey { get; }
+	
 		// extern NSString *const _Nonnull kYMMYandexMetricaErrorDomain;
-		[Field ("kYMMYandexMetricaErrorDomain", "__Internal")]
+		[Field("kYMMYandexMetricaErrorDomain", "__Internal")]
 		NSString kYMMYandexMetricaErrorDomain { get; }
 	}
+
+	// @protocol YMMErrorRepresentable <NSObject>
+	[Protocol, Model]
+	[BaseType (typeof(NSObject))]
+	interface YMMErrorRepresentable
+	{
+		// @required @property (readonly, copy, nonatomic) NSString * _Nonnull identifier;
+		[Abstract]
+		[Export ("identifier")]
+		string Identifier { get; }
+
+		// @optional @property (readonly, copy, nonatomic) NSString * _Nullable message;
+		[NullAllowed, Export ("message")]
+		string Message { get; }
+
+		// @optional @property (readonly, copy, nonatomic) NSDictionary<NSString *,id> * _Nullable parameters;
+		[NullAllowed, Export ("parameters", ArgumentSemantic.Copy)]
+		NSDictionary<NSString, NSObject> Parameters { get; }
+
+		// @optional @property (readonly, copy, nonatomic) NSArray<NSNumber *> * _Nullable backtrace;
+		[NullAllowed, Export ("backtrace", ArgumentSemantic.Copy)]
+		NSNumber[] Backtrace { get; }
+
+		// @optional @property (readonly, nonatomic, strong) id<YMMErrorRepresentable> _Nullable underlyingError;
+		[NullAllowed, Export ("underlyingError", ArgumentSemantic.Strong)]
+		YMMErrorRepresentable UnderlyingError { get; }
+	}
+
+
 
 	// @interface YMMYandexMetrica : NSObject
 	[BaseType (typeof(NSObject))]
@@ -44,10 +69,30 @@ namespace YandexMetricaIOS
 		[Export ("reportEvent:parameters:onFailure:")]
 		void ReportEvent (string message, [NullAllowed] NSDictionary @params, [NullAllowed] Action<NSError> onFailure);
 
-		// +(void)reportError:(NSString * _Nonnull)message exception:(NSException * _Nullable)exception onFailure:(void (^ _Nullable)(NSError * _Nonnull))onFailure;
+		// +(void)reportError:(NSString * _Nonnull)message exception:(NSException * _Nullable)exception onFailure:(void (^ _Nullable)(NSError * _Nonnull))onFailure __attribute__((deprecated("Use reportError:options:onFailure: or reportNSError:options:onFailure:")));
 		[Static]
 		[Export ("reportError:exception:onFailure:")]
 		void ReportError (string message, [NullAllowed] NSException exception, [NullAllowed] Action<NSError> onFailure);
+
+		// +(void)reportNSError:(NSError * _Nonnull)error onFailure:(void (^ _Nullable)(NSError * _Nonnull))onFailure;
+		[Static]
+		[Export ("reportNSError:onFailure:")]
+		void ReportNSError (NSError error, [NullAllowed] Action<NSError> onFailure);
+
+		// +(void)reportNSError:(NSError * _Nonnull)error options:(YMMErrorReportingOptions)options onFailure:(void (^ _Nullable)(NSError * _Nonnull))onFailure;
+		[Static]
+		[Export ("reportNSError:options:onFailure:")]
+		void ReportNSError (NSError error, YMMErrorRepresentable options, [NullAllowed] Action<NSError> onFailure);
+
+		// +(void)reportError:(id<YMMErrorRepresentable> _Nonnull)error onFailure:(void (^ _Nullable)(NSError * _Nonnull))onFailure;
+		[Static]
+		[Export ("reportError:onFailure:")]
+		void ReportError (YMMErrorRepresentable error, [NullAllowed] Action<NSError> onFailure);
+
+		// +(void)reportError:(id<YMMErrorRepresentable> _Nonnull)error options:(YMMErrorReportingOptions)options onFailure:(void (^ _Nullable)(NSError * _Nonnull))onFailure;
+		[Static]
+		[Export ("reportError:options:onFailure:")]
+		void ReportError (YMMErrorRepresentable error, YMMErrorRepresentable options, [NullAllowed] Action<NSError> onFailure);
 
 		// +(void)reportUserProfile:(YMMUserProfile * _Nonnull)userProfile onFailure:(void (^ _Nullable)(NSError * _Nonnull))onFailure;
 		[Static]
@@ -105,7 +150,7 @@ namespace YandexMetricaIOS
 		[return: NullAllowed]
 		YMMYandexMetricaReporting ReporterForApiKey (string apiKey);
 
-		// +(void)reportReferralUrl:(NSURL * _Nonnull)url __attribute__((deprecated("Referral URL reporting is no longer available")));
+		// +(void)reportReferralUrl:(NSURL * _Nonnull)url;
 		[Static]
 		[Export ("reportReferralUrl:")]
 		void ReportReferralUrl (NSUrl url);
@@ -124,12 +169,22 @@ namespace YandexMetricaIOS
 		[Static]
 		[Export ("pauseSession")]
 		void PauseSession ();
+
+		// +(void)setErrorEnvironmentValue:(NSString * _Nullable)value forKey:(NSString * _Nonnull)key;
+		[Static]
+		[Export ("setErrorEnvironmentValue:forKey:")]
+		void SetErrorEnvironmentValue ([NullAllowed] string value, string key);
+
+		// +(void)reportECommerce:(YMMECommerce * _Nonnull)eCommerce onFailure:(void (^ _Nullable)(NSError * _Nonnull))onFailure;
+		[Static]
+		[Export ("reportECommerce:onFailure:")]
+		void ReportECommerce (YMMECommerce eCommerce, [NullAllowed] Action<NSError> onFailure);
 	}
 
 	// @interface YMMYandexMetricaConfiguration : NSObject
 	[BaseType (typeof(NSObject))]
 	[DisableDefaultCtor]
-	public interface YMMYandexMetricaConfiguration
+	interface YMMYandexMetricaConfiguration
 	{
 		// -(instancetype _Nullable)initWithApiKey:(NSString * _Nonnull)apiKey;
 		[Export ("initWithApiKey:")]
@@ -155,6 +210,10 @@ namespace YandexMetricaIOS
 		[Export ("statisticsSending")]
 		bool StatisticsSending { get; set; }
 
+		// @property (assign, nonatomic) NSUInteger maxReportsInDatabaseCount;
+		[Export ("maxReportsInDatabaseCount")]
+		nuint MaxReportsInDatabaseCount { get; set; }
+
 		// @property (assign, nonatomic) BOOL locationTracking;
 		[Export ("locationTracking")]
 		bool LocationTracking { get; set; }
@@ -179,6 +238,10 @@ namespace YandexMetricaIOS
 		[Export ("logs")]
 		bool Logs { get; set; }
 
+		// @property (assign, nonatomic) BOOL appForKids __attribute__((deprecated("")));
+		[Export ("appForKids")]
+		bool AppForKids { get; set; }
+
 		// @property (copy, nonatomic) YMMYandexMetricaPreloadInfo * _Nullable preloadInfo;
 		[NullAllowed, Export ("preloadInfo", ArgumentSemantic.Copy)]
 		YMMYandexMetricaPreloadInfo PreloadInfo { get; set; }
@@ -200,6 +263,10 @@ namespace YandexMetricaIOS
 		// @property (readonly, assign, nonatomic) NSUInteger sessionTimeout;
 		[Export ("sessionTimeout")]
 		nuint SessionTimeout { get; }
+
+		// @property (readonly, assign, nonatomic) NSUInteger maxReportsInDatabaseCount;
+		[Export ("maxReportsInDatabaseCount")]
+		nuint MaxReportsInDatabaseCount { get; }
 
 		// @property (readonly, assign, nonatomic) BOOL logs;
 		[Export ("logs")]
@@ -223,6 +290,10 @@ namespace YandexMetricaIOS
 		[Export ("sessionTimeout")]
 		nuint SessionTimeout { get; set; }
 
+		// @property (assign, nonatomic) NSUInteger maxReportsInDatabaseCount;
+		[Export ("maxReportsInDatabaseCount")]
+		nuint MaxReportsInDatabaseCount { get; set; }
+
 		// @property (assign, nonatomic) BOOL logs;
 		[Export ("logs")]
 		bool Logs { get; set; }
@@ -243,10 +314,30 @@ namespace YandexMetricaIOS
 		[Export ("reportEvent:parameters:onFailure:")]
 		void ReportEvent (string name, [NullAllowed] NSDictionary @params, [NullAllowed] Action<NSError> onFailure);
 
-		// @required -(void)reportError:(NSString * _Nonnull)name exception:(NSException * _Nullable)exception onFailure:(void (^ _Nullable)(NSError * _Nonnull))onFailure;
+		// @required -(void)reportError:(NSString * _Nonnull)name exception:(NSException * _Nullable)exception onFailure:(void (^ _Nullable)(NSError * _Nonnull))onFailure __attribute__((deprecated("Use reportError:options:onFailure: or reportNSError:options:onFailure:")));
 		[Abstract]
 		[Export ("reportError:exception:onFailure:")]
 		void ReportError (string name, [NullAllowed] NSException exception, [NullAllowed] Action<NSError> onFailure);
+
+		// @required -(void)reportNSError:(NSError * _Nonnull)error onFailure:(void (^ _Nullable)(NSError * _Nonnull))onFailure;
+		[Abstract]
+		[Export ("reportNSError:onFailure:")]
+		void ReportNSError (NSError error, [NullAllowed] Action<NSError> onFailure);
+
+		// @required -(void)reportNSError:(NSError * _Nonnull)error options:(YMMErrorReportingOptions)options onFailure:(void (^ _Nullable)(NSError * _Nonnull))onFailure;
+		[Abstract]
+		[Export ("reportNSError:options:onFailure:")]
+		void ReportNSError (NSError error, YMMErrorRepresentable options, [NullAllowed] Action<NSError> onFailure);
+
+		// @required -(void)reportError:(id<YMMErrorRepresentable> _Nonnull)error onFailure:(void (^ _Nullable)(NSError * _Nonnull))onFailure;
+		[Abstract]
+		[Export ("reportError:onFailure:")]
+		void ReportError (YMMErrorRepresentable error, [NullAllowed] Action<NSError> onFailure);
+
+		// @required -(void)reportError:(id<YMMErrorRepresentable> _Nonnull)error options:(YMMErrorReportingOptions)options onFailure:(void (^ _Nullable)(NSError * _Nonnull))onFailure;
+		[Abstract]
+		[Export ("reportError:options:onFailure:")]
+		void ReportError (YMMErrorRepresentable error, YMMErrorRepresentable options, [NullAllowed] Action<NSError> onFailure);
 
 		// @required -(void)reportUserProfile:(YMMUserProfile * _Nonnull)userProfile onFailure:(void (^ _Nullable)(NSError * _Nonnull))onFailure;
 		[Abstract]
@@ -282,12 +373,17 @@ namespace YandexMetricaIOS
 		[Abstract]
 		[Export ("sendEventsBuffer")]
 		void SendEventsBuffer ();
+
+		// @required -(void)reportECommerce:(YMMECommerce * _Nonnull)eCommerce onFailure:(void (^ _Nullable)(NSError * _Nonnull))onFailure;
+		[Abstract]
+		[Export ("reportECommerce:onFailure:")]
+		void ReportECommerce (YMMECommerce eCommerce, [NullAllowed] Action<NSError> onFailure);
 	}
 
 	// @interface YMMYandexMetricaPreloadInfo : NSObject <NSCopying>
 	[BaseType (typeof(NSObject))]
 	[DisableDefaultCtor]
-	public interface YMMYandexMetricaPreloadInfo : INSCopying
+	interface YMMYandexMetricaPreloadInfo : INSCopying
 	{
 		// -(instancetype _Nullable)initWithTrackingIdentifier:(NSString * _Nonnull)trackingID;
 		[Export ("initWithTrackingIdentifier:")]
@@ -300,7 +396,7 @@ namespace YandexMetricaIOS
 
 	// @interface YMMUserProfileUpdate : NSObject
 	[BaseType (typeof(NSObject))]
-	interface YMMUserProfileUpdate
+	public interface YMMUserProfileUpdate
 	{
 	}
 
@@ -314,31 +410,27 @@ namespace YandexMetricaIOS
 		[Export ("withValue:")]
 		YMMUserProfileUpdate WithValue ([NullAllowed] string value);
 
-        // @required -(YMMUserProfileUpdate * _Nonnull)withValueReset;
-        [Abstract]
-        [Export ("withValueReset")]
-        YMMUserProfileUpdate WithValueReset ();
-	}
-
-    interface IYMMNameAttribute { }
-
-	// @protocol YMMGenderAttribute <NSObject>
-	[Protocol, Model(Name = "YMMGenderAttributeNative")]
-	[BaseType (typeof(NSObject))]
-	interface YMMGenderAttribute
-	{
-		// @required -(YMMUserProfileUpdate * _Nonnull)withValue:(YMMGenderType)value;
+		// @required -(YMMUserProfileUpdate * _Nonnull)withValueReset;
 		[Abstract]
-		[Export ("withValue:")]
-		YMMUserProfileUpdate WithValue (YMMGenderType value);
-
-        // @required -(YMMUserProfileUpdate * _Nonnull)withValueReset;
-        [Abstract]
-        [Export ("withValueReset")]
-        YMMUserProfileUpdate WithValueReset ();
+		[Export("withValueReset")]
+		YMMUserProfileUpdate WithValueReset();
 	}
 
-    interface IYMMGenderAttribute { }
+	//// @protocol YMMGenderAttribute <NSObject>
+	//[Protocol, Model]
+	//[BaseType (typeof(NSObject))]
+	//interface YMMGenderAttribute
+	//{
+	//	// @required -(YMMUserProfileUpdate * _Nonnull)withValue:(YMMGenderType)value;
+	//	[Abstract]
+	//	[Export ("withValue:")]
+	//	YMMUserProfileUpdate WithValue (YMMGenderType value);
+
+	//	// @required -(YMMUserProfileUpdate * _Nonnull)withValueReset;
+	//	[Abstract]
+	//	[Export ("withValueReset")]
+	//	YMMUserProfileUpdate WithValueReset();
+	//}
 
 	// @protocol YMMBirthDateAttribute <NSObject>
 	[Protocol, Model]
@@ -348,53 +440,51 @@ namespace YandexMetricaIOS
 		// @required -(YMMUserProfileUpdate * _Nonnull)withAge:(NSUInteger)value;
 		[Abstract]
 		[Export ("withAge:")]
-		YMMUserProfileUpdate WithAge (nuint value);
+		public YMMUserProfileUpdate WithAge (nuint value);
 
 		// @required -(YMMUserProfileUpdate * _Nonnull)withYear:(NSUInteger)year;
 		[Abstract]
 		[Export ("withYear:")]
-		YMMUserProfileUpdate WithBirthDate(nuint year);
+		 YMMUserProfileUpdate WithYear (nuint year);
 
 		// @required -(YMMUserProfileUpdate * _Nonnull)withYear:(NSUInteger)year month:(NSUInteger)month;
 		[Abstract]
 		[Export ("withYear:month:")]
-		YMMUserProfileUpdate WithBirthDate(nuint year, nuint month);
+		 YMMUserProfileUpdate WithYear (nuint year, nuint month);
 
 		// @required -(YMMUserProfileUpdate * _Nonnull)withYear:(NSUInteger)year month:(NSUInteger)month day:(NSUInteger)day;
 		[Abstract]
 		[Export ("withYear:month:day:")]
-		YMMUserProfileUpdate WithBirthDate(nuint year, nuint month, nuint day);
+		 YMMUserProfileUpdate WithYear (nuint year, nuint month, nuint day);
 
 		// @required -(YMMUserProfileUpdate * _Nonnull)withDateComponents:(NSDateComponents * _Nonnull)dateComponents;
 		[Abstract]
 		[Export ("withDateComponents:")]
-		YMMUserProfileUpdate WithDateComponents (NSDateComponents dateComponents);
+		 YMMUserProfileUpdate WithDateComponents (NSDateComponents dateComponents);
 
-        // @required -(YMMUserProfileUpdate * _Nonnull)withValueReset;
-        [Abstract]
-        [Export ("withValueReset")]
-        YMMUserProfileUpdate WithValueReset ();
+		// @required -(YMMUserProfileUpdate * _Nonnull)withValueReset;
+		[Abstract]
+		[Export("withValueReset")]
+		 YMMUserProfileUpdate WithValueReset();
 	}
 
-    interface IYMMBirthDateAttribute { }
+	interface IYMMBirthDateAttribute { }
 
 	// @protocol YMMNotificationsEnabledAttribute <NSObject>
 	[Protocol, Model]
-	[BaseType (typeof(NSObject))]
+	[BaseType(typeof(NSObject))]
 	interface YMMNotificationsEnabledAttribute
 	{
 		// @required -(YMMUserProfileUpdate * _Nonnull)withValue:(BOOL)value;
 		[Abstract]
-		[Export ("withValue:")]
-		YMMUserProfileUpdate WithValue (bool value);
+		[Export("withValue:")]
+		YMMUserProfileUpdate WithValue(bool value);
 
-        // @required -(YMMUserProfileUpdate * _Nonnull)withValueReset;
-        [Abstract]
-        [Export ("withValueReset")]
-        YMMUserProfileUpdate WithValueReset ();
+		// @required -(YMMUserProfileUpdate * _Nonnull)withValueReset;
+		[Abstract]
+		[Export("withValueReset")]
+		YMMUserProfileUpdate WithValueReset();
 	}
-
-    interface IYMMNotificationsEnabledAttribute { }
 
 	// @protocol YMMCustomStringAttribute <NSObject>
 	[Protocol, Model]
@@ -411,13 +501,11 @@ namespace YandexMetricaIOS
 		[Export ("withValueIfUndefined:")]
 		YMMUserProfileUpdate WithValueIfUndefined ([NullAllowed] string value);
 
-        // @required -(YMMUserProfileUpdate * _Nonnull)withValueReset;
-        [Abstract]
-        [Export ("withValueReset")]
-        YMMUserProfileUpdate WithValueReset ();
-	}
-
-    interface IYMMCustomStringAttribute {}
+		// @required -(YMMUserProfileUpdate * _Nonnull)withValueReset;
+		[Abstract]
+		[Export ("withValueReset")]
+		YMMUserProfileUpdate WithValueReset();
+		}
 
 	// @protocol YMMCustomNumberAttribute <NSObject>
 	[Protocol, Model]
@@ -434,13 +522,11 @@ namespace YandexMetricaIOS
 		[Export ("withValueIfUndefined:")]
 		YMMUserProfileUpdate WithValueIfUndefined (double value);
 
-        // @required -(YMMUserProfileUpdate * _Nonnull)withValueReset;
-        [Abstract]
-        [Export ("withValueReset")]
-        YMMUserProfileUpdate WithValueReset ();
-	}
-
-    interface IYMMCustomNumberAttribute {}
+		// @required -(YMMUserProfileUpdate * _Nonnull)withValueReset;
+		[Abstract]
+		[Export ("withValueReset")]
+		YMMUserProfileUpdate WithValueReset();
+		}
 
 	// @protocol YMMCustomCounterAttribute <NSObject>
 	[Protocol, Model]
@@ -452,8 +538,6 @@ namespace YandexMetricaIOS
 		[Export ("withDelta:")]
 		YMMUserProfileUpdate WithDelta (double value);
 	}
-
-    interface IYMMCustomCounterAttribute {}
 
 	// @protocol YMMCustomBoolAttribute <NSObject>
 	[Protocol, Model]
@@ -470,57 +554,55 @@ namespace YandexMetricaIOS
 		[Export ("withValueIfUndefined:")]
 		YMMUserProfileUpdate WithValueIfUndefined (bool value);
 
-        // @required -(YMMUserProfileUpdate * _Nonnull)withValueReset;
-        [Abstract]
-        [Export ("withValueReset")]
-        YMMUserProfileUpdate WithValueReset ();
-	}
-
-    interface IYMMCustomBoolAttribute {}
+		// @required -(YMMUserProfileUpdate * _Nonnull)withValueReset;
+		[Abstract]
+		[Export ("withValueReset")]
+		YMMUserProfileUpdate WithValueReset();
+		}
 
 	// @interface YMMProfileAttribute : NSObject
 	[BaseType (typeof(NSObject))]
 	interface YMMProfileAttribute
 	{
-        // +(id<YMMNameAttribute> _Nonnull)name;
-        [Static]
-        [Export ("name")]
-        IYMMNameAttribute Name ();
+		// +(id<YMMNameAttribute> _Nonnull)name;
+		[Static]
+		[Export("name")]
+		YMMNameAttribute Name();
 
-        // +(id<YMMGenderAttribute> _Nonnull)gender;
-        [Static]
-        [Export ("gender")]
-        IYMMGenderAttribute Gender ();
+		// +(id<YMMGenderAttribute> _Nonnull)gender;
+		//[Static]
+		//[Export("gender")]
+		////YMMGenderAttribute Gender();
 
-        // +(id<YMMBirthDateAttribute> _Nonnull)birthDate;
-        [Static]
-        [Export ("birthDate")]
-        IYMMBirthDateAttribute BirthDate ();
+		// +(id<YMMBirthDateAttribute> _Nonnull)birthDate;
+		[Static]
+		[Export("birthDate")]
+		IYMMBirthDateAttribute BirthDate();
 
-        // +(id<YMMNotificationsEnabledAttribute> _Nonnull)notificationsEnabled;
-        [Static]
-        [Export ("notificationsEnabled")]
-        IYMMNotificationsEnabledAttribute NotificationsEnabled ();
+		// +(id<YMMNotificationsEnabledAttribute> _Nonnull)notificationsEnabled;
+		[Static]
+		[Export ("notificationsEnabled")]
+		YMMNotificationsEnabledAttribute NotificationsEnabled();
 
 		// +(id<YMMCustomStringAttribute> _Nonnull)customString:(NSString * _Nonnull)name;
 		[Static]
 		[Export ("customString:")]
-		IYMMCustomStringAttribute CustomString (string name);
+		YMMCustomStringAttribute CustomString (string name);
 
 		// +(id<YMMCustomNumberAttribute> _Nonnull)customNumber:(NSString * _Nonnull)name;
 		[Static]
 		[Export ("customNumber:")]
-		IYMMCustomNumberAttribute CustomNumber (string name);
+		YMMCustomNumberAttribute CustomNumber (string name);
 
 		// +(id<YMMCustomCounterAttribute> _Nonnull)customCounter:(NSString * _Nonnull)name;
 		[Static]
 		[Export ("customCounter:")]
-		IYMMCustomCounterAttribute CustomCounter (string name);
+		YMMCustomCounterAttribute CustomCounter (string name);
 
 		// +(id<YMMCustomBoolAttribute> _Nonnull)customBool:(NSString * _Nonnull)name;
 		[Static]
 		[Export ("customBool:")]
-		IYMMCustomBoolAttribute CustomBool (string name);
+		YMMCustomBoolAttribute CustomBool (string name);
 	}
 
 	// @interface YMMUserProfile : NSObject <NSCopying, NSMutableCopying>
@@ -552,7 +634,7 @@ namespace YandexMetricaIOS
 	// @interface YMMRevenueInfo : NSObject <NSCopying, NSMutableCopying>
 	[BaseType (typeof(NSObject))]
 	[DisableDefaultCtor]
-	public interface YMMRevenueInfo : INSCopying, INSMutableCopying
+	interface YMMRevenueInfo : INSCopying, INSMutableCopying
 	{
 		// @property (readonly, assign, nonatomic) double price __attribute__((deprecated("Use priceDecimal")));
 		[Export ("price")]
@@ -562,7 +644,7 @@ namespace YandexMetricaIOS
 		[NullAllowed, Export ("priceDecimal", ArgumentSemantic.Strong)]
 		NSDecimalNumber PriceDecimal { get; }
 
-		// @property (readonly, copy, nonatomic) NSString * currency;
+		// @property (readonly, copy, nonatomic) NSString * _Nonnull currency;
 		[Export ("currency")]
 		string Currency { get; }
 
@@ -626,5 +708,265 @@ namespace YandexMetricaIOS
 		// @property (copy, nonatomic) NSDictionary * _Nonnull payload;
 		[Export ("payload", ArgumentSemantic.Copy)]
 		NSDictionary Payload { get; set; }
+	}
+
+	// @interface YMMError : NSObject <YMMErrorRepresentable>
+	[BaseType (typeof(NSObject))]
+	[DisableDefaultCtor]
+	interface YMMError : YMMErrorRepresentable
+	{
+		// +(instancetype _Nonnull)errorWithIdentifier:(NSString * _Nonnull)identifier;
+		[Static]
+		[Export ("errorWithIdentifier:")]
+		YMMError ErrorWithIdentifier (string identifier);
+
+		// +(instancetype _Nonnull)errorWithIdentifier:(NSString * _Nonnull)identifier message:(NSString * _Nullable)message parameters:(NSDictionary<NSString *,id> * _Nullable)parameters;
+		[Static]
+		[Export ("errorWithIdentifier:message:parameters:")]
+		YMMError ErrorWithIdentifier (string identifier, [NullAllowed] string message, [NullAllowed] NSDictionary<NSString, NSObject> parameters);
+
+		// +(instancetype _Nonnull)errorWithIdentifier:(NSString * _Nonnull)identifier message:(NSString * _Nullable)message parameters:(NSDictionary<NSString *,id> * _Nullable)parameters backtrace:(NSArray<NSNumber *> * _Nullable)backtrace underlyingError:(id<YMMErrorRepresentable> _Nullable)underlyingError;
+		[Static]
+		[Export ("errorWithIdentifier:message:parameters:backtrace:underlyingError:")]
+		YMMError ErrorWithIdentifier (string identifier, [NullAllowed] string message, [NullAllowed] NSDictionary<NSString, NSObject> parameters, [NullAllowed] NSNumber[] backtrace, [NullAllowed] YMMErrorRepresentable underlyingError);
+	}
+
+	// @interface YMMECommerceAmount : NSObject
+	[BaseType (typeof(NSObject))]
+	[DisableDefaultCtor]
+	interface YMMECommerceAmount
+	{
+		// @property (readonly, copy, nonatomic) NSString * _Nonnull unit;
+		[Export ("unit")]
+		string Unit { get; }
+
+		// @property (readonly, nonatomic, strong) NSDecimalNumber * _Nonnull value;
+		[Export ("value", ArgumentSemantic.Strong)]
+		NSDecimalNumber Value { get; }
+
+		// -(instancetype _Nonnull)initWithUnit:(NSString * _Nonnull)unit value:(NSDecimalNumber * _Nonnull)value;
+		[Export ("initWithUnit:value:")]
+		IntPtr Constructor (string unit, NSDecimalNumber value);
+	}
+
+	// @interface YMMECommercePrice : NSObject
+	[BaseType (typeof(NSObject))]
+	[DisableDefaultCtor]
+	interface YMMECommercePrice
+	{
+		// @property (readonly, nonatomic, strong) YMMECommerceAmount * _Nonnull fiat;
+		[Export ("fiat", ArgumentSemantic.Strong)]
+		YMMECommerceAmount Fiat { get; }
+
+		// @property (readonly, copy, nonatomic) NSArray<YMMECommerceAmount *> * _Nullable internalComponents;
+		[NullAllowed, Export ("internalComponents", ArgumentSemantic.Copy)]
+		YMMECommerceAmount[] InternalComponents { get; }
+
+		// -(instancetype _Nonnull)initWithFiat:(YMMECommerceAmount * _Nonnull)fiat;
+		[Export ("initWithFiat:")]
+		IntPtr Constructor (YMMECommerceAmount fiat);
+
+		// -(instancetype _Nonnull)initWithFiat:(YMMECommerceAmount * _Nonnull)fiat internalComponents:(NSArray<YMMECommerceAmount *> * _Nullable)internalComponents;
+		[Export ("initWithFiat:internalComponents:")]
+		IntPtr Constructor (YMMECommerceAmount fiat, [NullAllowed] YMMECommerceAmount[] internalComponents);
+	}
+
+	// @interface YMMECommerceScreen : NSObject
+	[BaseType (typeof(NSObject))]
+	[DisableDefaultCtor]
+	interface YMMECommerceScreen
+	{
+		// @property (readonly, copy, nonatomic) NSString * _Nullable name;
+		[NullAllowed, Export ("name")]
+		string Name { get; }
+
+		// @property (readonly, copy, nonatomic) NSArray<NSString *> * _Nullable categoryComponents;
+		[NullAllowed, Export ("categoryComponents", ArgumentSemantic.Copy)]
+		string[] CategoryComponents { get; }
+
+		// @property (readonly, copy, nonatomic) NSString * _Nullable searchQuery;
+		[NullAllowed, Export ("searchQuery")]
+		string SearchQuery { get; }
+
+		// @property (readonly, copy, nonatomic) NSDictionary<NSString *,NSString *> * _Nullable payload;
+		[NullAllowed, Export ("payload", ArgumentSemantic.Copy)]
+		NSDictionary<NSString, NSString> Payload { get; }
+
+		// -(instancetype _Nonnull)initWithName:(NSString * _Nonnull)name;
+		[Export ("initWithName:")]
+		IntPtr Constructor (string name);
+
+		// -(instancetype _Nonnull)initWithCategoryComponents:(NSArray<NSString *> * _Nonnull)categoryComponents;
+		[Export ("initWithCategoryComponents:")]
+		IntPtr Constructor (string[] categoryComponents);
+
+		// -(instancetype _Nonnull)initWithSearchQuery:(NSString * _Nonnull)searchQuery;
+		[Export ("initWithSearchQuery:")]
+		IntPtr Constructor2 (string searchQuery);
+
+		// -(instancetype _Nonnull)initWithPayload:(NSDictionary<NSString *,NSString *> * _Nonnull)payload;
+		[Export ("initWithPayload:")]
+		IntPtr Constructor (NSDictionary<NSString, NSString> payload);
+
+		// -(instancetype _Nonnull)initWithName:(NSString * _Nullable)name categoryComponents:(NSArray<NSString *> * _Nullable)categoryComponents searchQuery:(NSString * _Nullable)searchQuery payload:(NSDictionary<NSString *,NSString *> * _Nullable)payload;
+		[Export ("initWithName:categoryComponents:searchQuery:payload:")]
+		IntPtr Constructor ([NullAllowed] string name, [NullAllowed] string[] categoryComponents, [NullAllowed] string searchQuery, [NullAllowed] NSDictionary<NSString, NSString> payload);
+	}
+
+	// @interface YMMECommerceProduct : NSObject
+	[BaseType (typeof(NSObject))]
+	[DisableDefaultCtor]
+	interface YMMECommerceProduct
+	{
+		// @property (readonly, copy, nonatomic) NSString * _Nonnull sku;
+		[Export ("sku")]
+		string Sku { get; }
+
+		// @property (readonly, copy, nonatomic) NSString * _Nullable name;
+		[NullAllowed, Export ("name")]
+		string Name { get; }
+
+		// @property (readonly, copy, nonatomic) NSArray<NSString *> * _Nullable categoryComponents;
+		[NullAllowed, Export ("categoryComponents", ArgumentSemantic.Copy)]
+		string[] CategoryComponents { get; }
+
+		// @property (readonly, copy, nonatomic) NSDictionary<NSString *,NSString *> * _Nullable payload;
+		[NullAllowed, Export ("payload", ArgumentSemantic.Copy)]
+		NSDictionary<NSString, NSString> Payload { get; }
+
+		// @property (readonly, nonatomic, strong) YMMECommercePrice * _Nullable actualPrice;
+		[NullAllowed, Export ("actualPrice", ArgumentSemantic.Strong)]
+		YMMECommercePrice ActualPrice { get; }
+
+		// @property (readonly, nonatomic, strong) YMMECommercePrice * _Nullable originalPrice;
+		[NullAllowed, Export ("originalPrice", ArgumentSemantic.Strong)]
+		YMMECommercePrice OriginalPrice { get; }
+
+		// @property (readonly, copy, nonatomic) NSArray<NSString *> * _Nullable promoCodes;
+		[NullAllowed, Export ("promoCodes", ArgumentSemantic.Copy)]
+		string[] PromoCodes { get; }
+
+		// -(instancetype _Nonnull)initWithSKU:(NSString * _Nonnull)sku;
+		[Export ("initWithSKU:")]
+		IntPtr Constructor (string sku);
+
+		// -(instancetype _Nonnull)initWithSKU:(NSString * _Nonnull)sku name:(NSString * _Nullable)name categoryComponents:(NSArray<NSString *> * _Nullable)categoryComponents payload:(NSDictionary<NSString *,NSString *> * _Nullable)payload actualPrice:(YMMECommercePrice * _Nullable)actualPrice originalPrice:(YMMECommercePrice * _Nullable)originalPrice promoCodes:(NSArray<NSString *> * _Nullable)promoCodes;
+		[Export ("initWithSKU:name:categoryComponents:payload:actualPrice:originalPrice:promoCodes:")]
+		IntPtr Constructor (string sku, [NullAllowed] string name, [NullAllowed] string[] categoryComponents, [NullAllowed] NSDictionary<NSString, NSString> payload, [NullAllowed] YMMECommercePrice actualPrice, [NullAllowed] YMMECommercePrice originalPrice, [NullAllowed] string[] promoCodes);
+	}
+
+	// @interface YMMECommerceReferrer : NSObject
+	[BaseType (typeof(NSObject))]
+	[DisableDefaultCtor]
+	interface YMMECommerceReferrer
+	{
+		// @property (readonly, copy, nonatomic) NSString * _Nullable type;
+		[NullAllowed, Export ("type")]
+		string Type { get; }
+
+		// @property (readonly, copy, nonatomic) NSString * _Nullable identifier;
+		[NullAllowed, Export ("identifier")]
+		string Identifier { get; }
+
+		// @property (readonly, nonatomic, strong) YMMECommerceScreen * _Nullable screen;
+		[NullAllowed, Export ("screen", ArgumentSemantic.Strong)]
+		YMMECommerceScreen Screen { get; }
+
+		// -(instancetype _Nonnull)initWithType:(NSString * _Nullable)type identifier:(NSString * _Nullable)identifier screen:(YMMECommerceScreen * _Nullable)screen;
+		[Export ("initWithType:identifier:screen:")]
+		IntPtr Constructor ([NullAllowed] string type, [NullAllowed] string identifier, [NullAllowed] YMMECommerceScreen screen);
+	}
+
+	// @interface YMMECommerceCartItem : NSObject
+	[BaseType (typeof(NSObject))]
+	[DisableDefaultCtor]
+	interface YMMECommerceCartItem
+	{
+		// @property (readonly, nonatomic, strong) YMMECommerceProduct * _Nonnull product;
+		[Export ("product", ArgumentSemantic.Strong)]
+		YMMECommerceProduct Product { get; }
+
+		// @property (readonly, nonatomic, strong) NSDecimalNumber * _Nonnull quantity;
+		[Export ("quantity", ArgumentSemantic.Strong)]
+		NSDecimalNumber Quantity { get; }
+
+		// @property (readonly, nonatomic, strong) YMMECommercePrice * _Nonnull revenue;
+		[Export ("revenue", ArgumentSemantic.Strong)]
+		YMMECommercePrice Revenue { get; }
+
+		// @property (readonly, nonatomic, strong) YMMECommerceReferrer * _Nullable referrer;
+		[NullAllowed, Export ("referrer", ArgumentSemantic.Strong)]
+		YMMECommerceReferrer Referrer { get; }
+
+		// -(instancetype _Nonnull)initWithProduct:(YMMECommerceProduct * _Nonnull)product quantity:(NSDecimalNumber * _Nonnull)quantity revenue:(YMMECommercePrice * _Nonnull)revenue referrer:(YMMECommerceReferrer * _Nullable)referrer;
+		[Export ("initWithProduct:quantity:revenue:referrer:")]
+		IntPtr Constructor (YMMECommerceProduct product, NSDecimalNumber quantity, YMMECommercePrice revenue, [NullAllowed] YMMECommerceReferrer referrer);
+	}
+
+	// @interface YMMECommerceOrder : NSObject
+	[BaseType (typeof(NSObject))]
+	[DisableDefaultCtor]
+	interface YMMECommerceOrder
+	{
+		// @property (readonly, copy, nonatomic) NSString * _Nonnull identifier;
+		[Export ("identifier")]
+		string Identifier { get; }
+
+		// @property (readonly, copy, nonatomic) NSArray<YMMECommerceCartItem *> * _Nonnull cartItems;
+		[Export ("cartItems", ArgumentSemantic.Copy)]
+		YMMECommerceCartItem[] CartItems { get; }
+
+		// @property (readonly, copy, nonatomic) NSDictionary<NSString *,NSString *> * _Nullable payload;
+		[NullAllowed, Export ("payload", ArgumentSemantic.Copy)]
+		NSDictionary<NSString, NSString> Payload { get; }
+
+		// -(instancetype _Nonnull)initWithIdentifier:(NSString * _Nonnull)identifier cartItems:(NSArray<YMMECommerceCartItem *> * _Nonnull)cartItems;
+		[Export ("initWithIdentifier:cartItems:")]
+		IntPtr Constructor (string identifier, YMMECommerceCartItem[] cartItems);
+
+		// -(instancetype _Nonnull)initWithIdentifier:(NSString * _Nonnull)identifier cartItems:(NSArray<YMMECommerceCartItem *> * _Nonnull)cartItems payload:(NSDictionary<NSString *,NSString *> * _Nullable)payload;
+		[Export ("initWithIdentifier:cartItems:payload:")]
+		IntPtr Constructor (string identifier, YMMECommerceCartItem[] cartItems, [NullAllowed] NSDictionary<NSString, NSString> payload);
+	}
+
+	// @interface YMMECommerce : NSObject
+	[BaseType (typeof(NSObject))]
+	[DisableDefaultCtor]
+	interface YMMECommerce
+	{
+		// +(instancetype _Nonnull)showScreenEventWithScreen:(YMMECommerceScreen * _Nonnull)screen;
+		[Static]
+		[Export ("showScreenEventWithScreen:")]
+		YMMECommerce ShowScreenEventWithScreen (YMMECommerceScreen screen);
+
+		// +(instancetype _Nonnull)showProductCardEventWithProduct:(YMMECommerceProduct * _Nonnull)product screen:(YMMECommerceScreen * _Nonnull)screen;
+		[Static]
+		[Export ("showProductCardEventWithProduct:screen:")]
+		YMMECommerce ShowProductCardEventWithProduct (YMMECommerceProduct product, YMMECommerceScreen screen);
+
+		// +(instancetype _Nonnull)showProductDetailsEventWithProduct:(YMMECommerceProduct * _Nonnull)product referrer:(YMMECommerceReferrer * _Nullable)referrer;
+		[Static]
+		[Export ("showProductDetailsEventWithProduct:referrer:")]
+		YMMECommerce ShowProductDetailsEventWithProduct (YMMECommerceProduct product, [NullAllowed] YMMECommerceReferrer referrer);
+
+		// +(instancetype _Nonnull)addCartItemEventWithItem:(YMMECommerceCartItem * _Nonnull)item;
+		[Static]
+		[Export ("addCartItemEventWithItem:")]
+		YMMECommerce AddCartItemEventWithItem (YMMECommerceCartItem item);
+
+		// +(instancetype _Nonnull)removeCartItemEventWithItem:(YMMECommerceCartItem * _Nonnull)item;
+		[Static]
+		[Export ("removeCartItemEventWithItem:")]
+		YMMECommerce RemoveCartItemEventWithItem (YMMECommerceCartItem item);
+
+		// +(instancetype _Nonnull)beginCheckoutEventWithOrder:(YMMECommerceOrder * _Nonnull)order;
+		[Static]
+		[Export ("beginCheckoutEventWithOrder:")]
+		YMMECommerce BeginCheckoutEventWithOrder (YMMECommerceOrder order);
+
+		// +(instancetype _Nonnull)purchaseEventWithOrder:(YMMECommerceOrder * _Nonnull)order;
+		[Static]
+		[Export ("purchaseEventWithOrder:")]
+		YMMECommerce PurchaseEventWithOrder (YMMECommerceOrder order);
 	}
 }
