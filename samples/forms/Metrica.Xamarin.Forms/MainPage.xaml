@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="Metrica.Sample.Forms.MainPage" Padding="0, 20, 0, 0">
+	<ContentPage.Content>
+		<ScrollView>
+			<StackLayout VerticalOptions="Center" HorizontalOptions="FillAndExpand" Orientation="Vertical" Spacing="5">
+				<Label Text="Hello! I'm AppMetrica Xamarin Forms sample." HorizontalTextAlignment="Center" />
+
+				<StackLayout VerticalOptions="Center" HorizontalOptions="Center" Orientation="Vertical" Spacing="5">
+					<Button x:Name="clickButton" Text="Log click" Clicked="OnEventClicked" />
+					<Button x:Name="errorButton" Text="Log error" Clicked="OnErrorClicked" />
+					<Button Text="Throw Exception" Clicked="OnCrashClicked" />
+				</StackLayout>
+
+				<Grid>
+					<Grid.RowDefinitions>
+						<RowDefinition Height="Auto" />
+						<RowDefinition Height="Auto" />
+						<RowDefinition Height="Auto" />
+						<RowDefinition Height="Auto" />
+						<RowDefinition Height="Auto" />
+					</Grid.RowDefinitions>
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="2*" />
+						<ColumnDefinition Width="1*" />
+						<ColumnDefinition Width="1*" />
+					</Grid.ColumnDefinitions>
+
+					<!-- Row 0 -->
+					<Label Text="Location:" Grid.Row="0" Grid.Column="0" HorizontalTextAlignment="End" VerticalTextAlignment="Center" />
+					<Button Text="Minsk" Grid.Row="0" Grid.Column="1" HorizontalOptions="Fill" Clicked="OnSetMinskLocation" />
+					<Button Text="Moscow" Grid.Row="0" Grid.Column="2" HorizontalOptions="Fill" Clicked="OnSetMoscowLocation" />
+				</Grid>
+
+				<Button Text="Library Version" Clicked="OnLibraryVersionClicked" />
+				<Button Text="Library API Level" Clicked="OnLibraryAPILevelClicked">
+					<Button.IsEnabled>
+						<OnPlatform x:TypeArguments="x:Boolean" iOS="False" Android="True"/>
+					</Button.IsEnabled>
+				</Button>
+			</StackLayout>
+		</ScrollView>
+	</ContentPage.Content>
+</ContentPage>
