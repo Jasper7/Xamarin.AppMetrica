@@ -35,8 +35,8 @@ unzip -q framework.zip
 
 echo "Copying library and headers from framework"
 copy_library_and_headers_from_framework() { #1 - framework name
-	cp "ios/static/$1.framework/$1" "../Libs/lib$1-${METRICA_NEW_VER}.a"
-	cp -r "ios/static/$1.framework/Headers" "../Headers/$1"
+	cp "static/$1.xcframework/ios-arm64_armv7/$1.framework/$1" "../Libs/lib$1-${METRICA_NEW_VER}.a"
+	cp -r "static/$1.xcframework/ios-arm64_armv7/$1.framework/Headers" "../Headers/$1"
 }
 rm -rf ../Headers && mkdir ../Headers
 rm -rf ../Libs && mkdir ../Libs

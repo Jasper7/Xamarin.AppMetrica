@@ -3,6 +3,7 @@ using CoreFoundation;
 using CoreLocation;
 using Foundation;
 using ObjCRuntime;
+using WebKit;
 
 namespace YandexMetricaIOS
 {
@@ -10,19 +11,27 @@ namespace YandexMetricaIOS
 	delegate void YMMAppMetricaDeviceIDRetrievingBlock ([NullAllowed] string arg0, [NullAllowed] NSError arg1);
 
 	[Static]
-	partial interface Constants
+	interface Constants
 	{
 		// extern const NSErrorUserInfoKey _Nonnull YMMBacktraceErrorKey;
 		[Field ("YMMBacktraceErrorKey", "__Internal")]
 		NSString YMMBacktraceErrorKey { get; }
-	
+
 		// extern NSString *const _Nonnull kYMMYandexMetricaErrorDomain;
 		[Field("kYMMYandexMetricaErrorDomain", "__Internal")]
 		NSString kYMMYandexMetricaErrorDomain { get; }
 	}
 
 	// @protocol YMMErrorRepresentable <NSObject>
-	[Protocol, Model]
+	/*
+  Check whether adding [Model] to this declaration is appropriate.
+  [Model] is used to generate a C# class that implements this protocol,
+  and might be useful for protocols that consumers are supposed to implement,
+  since consumers can subclass the generated class instead of implementing
+  the generated interface. If consumers are not supposed to implement this
+  protocol, then [Model] is redundant and will generate code that will never
+  be used.
+*/[Protocol]
 	[BaseType (typeof(NSObject))]
 	interface YMMErrorRepresentable
 	{
@@ -48,8 +57,6 @@ namespace YandexMetricaIOS
 		YMMErrorRepresentable UnderlyingError { get; }
 	}
 
-
-
 	// @interface YMMYandexMetrica : NSObject
 	[BaseType (typeof(NSObject))]
 	interface YMMYandexMetrica
@@ -74,25 +81,25 @@ namespace YandexMetricaIOS
 		[Export ("reportError:exception:onFailure:")]
 		void ReportError (string message, [NullAllowed] NSException exception, [NullAllowed] Action<NSError> onFailure);
 
-		// +(void)reportNSError:(NSError * _Nonnull)error onFailure:(void (^ _Nullable)(NSError * _Nonnull))onFailure;
+		// +(void)reportNSError:(NSError * _Nonnull)error onFailure:(void (^ _Nullable)(NSError * _Nonnull))onFailure __attribute__((swift_name("report(nserror:onFailure:)")));
 		[Static]
 		[Export ("reportNSError:onFailure:")]
 		void ReportNSError (NSError error, [NullAllowed] Action<NSError> onFailure);
 
-		// +(void)reportNSError:(NSError * _Nonnull)error options:(YMMErrorReportingOptions)options onFailure:(void (^ _Nullable)(NSError * _Nonnull))onFailure;
+		// +(void)reportNSError:(NSError * _Nonnull)error options:(YMMErrorReportingOptions)options onFailure:(void (^ _Nullable)(NSError * _Nonnull))onFailure __attribute__((swift_name("report(nserror:options:onFailure:)")));
 		[Static]
 		[Export ("reportNSError:options:onFailure:")]
-		void ReportNSError (NSError error, YMMErrorRepresentable options, [NullAllowed] Action<NSError> onFailure);
+		void ReportNSError (NSError error, YMMErrorReportingOptions options, [NullAllowed] Action<NSError> onFailure);
 
-		// +(void)reportError:(id<YMMErrorRepresentable> _Nonnull)error onFailure:(void (^ _Nullable)(NSError * _Nonnull))onFailure;
+		// +(void)reportError:(id<YMMErrorRepresentable> _Nonnull)error onFailure:(void (^ _Nullable)(NSError * _Nonnull))onFailure __attribute__((swift_name("report(error:onFailure:)")));
 		[Static]
 		[Export ("reportError:onFailure:")]
 		void ReportError (YMMErrorRepresentable error, [NullAllowed] Action<NSError> onFailure);
 
-		// +(void)reportError:(id<YMMErrorRepresentable> _Nonnull)error options:(YMMErrorReportingOptions)options onFailure:(void (^ _Nullable)(NSError * _Nonnull))onFailure;
+		// +(void)reportError:(id<YMMErrorRepresentable> _Nonnull)error options:(YMMErrorReportingOptions)options onFailure:(void (^ _Nullable)(NSError * _Nonnull))onFailure __attribute__((swift_name("report(error:options:onFailure:)")));
 		[Static]
 		[Export ("reportError:options:onFailure:")]
-		void ReportError (YMMErrorRepresentable error, YMMErrorRepresentable options, [NullAllowed] Action<NSError> onFailure);
+		void ReportError (YMMErrorRepresentable error, YMMErrorReportingOptions options, [NullAllowed] Action<NSError> onFailure);
 
 		// +(void)reportUserProfile:(YMMUserProfile * _Nonnull)userProfile onFailure:(void (^ _Nullable)(NSError * _Nonnull))onFailure;
 		[Static]
@@ -175,10 +182,15 @@ namespace YandexMetricaIOS
 		[Export ("setErrorEnvironmentValue:forKey:")]
 		void SetErrorEnvironmentValue ([NullAllowed] string value, string key);
 
-		// +(void)reportECommerce:(YMMECommerce * _Nonnull)eCommerce onFailure:(void (^ _Nullable)(NSError * _Nonnull))onFailure;
+		// +(void)reportECommerce:(YMMECommerce * _Nonnull)eCommerce onFailure:(void (^ _Nullable)(NSError * _Nonnull))onFailure __attribute__((swift_name("report(eCommerce:onFailure:)")));
 		[Static]
 		[Export ("reportECommerce:onFailure:")]
 		void ReportECommerce (YMMECommerce eCommerce, [NullAllowed] Action<NSError> onFailure);
+
+		// +(void)initWebViewReporting:(WKUserContentController * _Nonnull)userContentController onFailure:(void (^ _Nullable)(NSError * _Nonnull))onFailure;
+		[Static]
+		[Export ("initWebViewReporting:onFailure:")]
+		void InitWebViewReporting (WKUserContentController userContentController, [NullAllowed] Action<NSError> onFailure);
 	}
 
 	// @interface YMMYandexMetricaConfiguration : NSObject
@@ -245,6 +257,18 @@ namespace YandexMetricaIOS
 		// @property (copy, nonatomic) YMMYandexMetricaPreloadInfo * _Nullable preloadInfo;
 		[NullAllowed, Export ("preloadInfo", ArgumentSemantic.Copy)]
 		YMMYandexMetricaPreloadInfo PreloadInfo { get; set; }
+
+		// @property (assign, nonatomic) BOOL revenueAutoTrackingEnabled;
+		[Export ("revenueAutoTrackingEnabled")]
+		bool RevenueAutoTrackingEnabled { get; set; }
+
+		// @property (assign, nonatomic) BOOL appOpenTrackingEnabled;
+		[Export ("appOpenTrackingEnabled")]
+		bool AppOpenTrackingEnabled { get; set; }
+
+		// @property (copy, nonatomic) NSString * _Nullable userProfileID;
+		[NullAllowed, Export ("userProfileID")]
+		string UserProfileID { get; set; }
 	}
 
 	// @interface YMMReporterConfiguration : NSObject <NSCopying, NSMutableCopying>
@@ -272,6 +296,10 @@ namespace YandexMetricaIOS
 		[Export ("logs")]
 		bool Logs { get; }
 
+		// @property (readonly, copy, nonatomic) NSString * _Nullable userProfileID;
+		[NullAllowed, Export ("userProfileID")]
+		string UserProfileID { get; }
+
 		// -(instancetype _Nullable)initWithApiKey:(NSString * _Nonnull)apiKey;
 		[Export ("initWithApiKey:")]
 		IntPtr Constructor (string apiKey);
@@ -297,10 +325,22 @@ namespace YandexMetricaIOS
 		// @property (assign, nonatomic) BOOL logs;
 		[Export ("logs")]
 		bool Logs { get; set; }
+
+		// @property (copy, nonatomic) NSString * _Nullable userProfileID;
+		[NullAllowed, Export ("userProfileID")]
+		string UserProfileID { get; set; }
 	}
 
 	// @protocol YMMYandexMetricaReporting <NSObject>
-	[Protocol, Model]
+	/*
+  Check whether adding [Model] to this declaration is appropriate.
+  [Model] is used to generate a C# class that implements this protocol,
+  and might be useful for protocols that consumers are supposed to implement,
+  since consumers can subclass the generated class instead of implementing
+  the generated interface. If consumers are not supposed to implement this
+  protocol, then [Model] is redundant and will generate code that will never
+  be used.
+*/[Protocol]
 	[BaseType (typeof(NSObject))]
 	interface YMMYandexMetricaReporting
 	{
@@ -319,25 +359,25 @@ namespace YandexMetricaIOS
 		[Export ("reportError:exception:onFailure:")]
 		void ReportError (string name, [NullAllowed] NSException exception, [NullAllowed] Action<NSError> onFailure);
 
-		// @required -(void)reportNSError:(NSError * _Nonnull)error onFailure:(void (^ _Nullable)(NSError * _Nonnull))onFailure;
+		// @required -(void)reportNSError:(NSError * _Nonnull)error onFailure:(void (^ _Nullable)(NSError * _Nonnull))onFailure __attribute__((swift_name("report(nserror:onFailure:)")));
 		[Abstract]
 		[Export ("reportNSError:onFailure:")]
 		void ReportNSError (NSError error, [NullAllowed] Action<NSError> onFailure);
 
-		// @required -(void)reportNSError:(NSError * _Nonnull)error options:(YMMErrorReportingOptions)options onFailure:(void (^ _Nullable)(NSError * _Nonnull))onFailure;
+		// @required -(void)reportNSError:(NSError * _Nonnull)error options:(YMMErrorReportingOptions)options onFailure:(void (^ _Nullable)(NSError * _Nonnull))onFailure __attribute__((swift_name("report(nserror:options:onFailure:)")));
 		[Abstract]
 		[Export ("reportNSError:options:onFailure:")]
-		void ReportNSError (NSError error, YMMErrorRepresentable options, [NullAllowed] Action<NSError> onFailure);
+		void ReportNSError (NSError error, YMMErrorReportingOptions options, [NullAllowed] Action<NSError> onFailure);
 
-		// @required -(void)reportError:(id<YMMErrorRepresentable> _Nonnull)error onFailure:(void (^ _Nullable)(NSError * _Nonnull))onFailure;
+		// @required -(void)reportError:(id<YMMErrorRepresentable> _Nonnull)error onFailure:(void (^ _Nullable)(NSError * _Nonnull))onFailure __attribute__((swift_name("report(error:onFailure:)")));
 		[Abstract]
 		[Export ("reportError:onFailure:")]
 		void ReportError (YMMErrorRepresentable error, [NullAllowed] Action<NSError> onFailure);
 
-		// @required -(void)reportError:(id<YMMErrorRepresentable> _Nonnull)error options:(YMMErrorReportingOptions)options onFailure:(void (^ _Nullable)(NSError * _Nonnull))onFailure;
+		// @required -(void)reportError:(id<YMMErrorRepresentable> _Nonnull)error options:(YMMErrorReportingOptions)options onFailure:(void (^ _Nullable)(NSError * _Nonnull))onFailure __attribute__((swift_name("report(error:options:onFailure:)")));
 		[Abstract]
 		[Export ("reportError:options:onFailure:")]
-		void ReportError (YMMErrorRepresentable error, YMMErrorRepresentable options, [NullAllowed] Action<NSError> onFailure);
+		void ReportError (YMMErrorRepresentable error, YMMErrorReportingOptions options, [NullAllowed] Action<NSError> onFailure);
 
 		// @required -(void)reportUserProfile:(YMMUserProfile * _Nonnull)userProfile onFailure:(void (^ _Nullable)(NSError * _Nonnull))onFailure;
 		[Abstract]
@@ -374,7 +414,7 @@ namespace YandexMetricaIOS
 		[Export ("sendEventsBuffer")]
 		void SendEventsBuffer ();
 
-		// @required -(void)reportECommerce:(YMMECommerce * _Nonnull)eCommerce onFailure:(void (^ _Nullable)(NSError * _Nonnull))onFailure;
+		// @required -(void)reportECommerce:(YMMECommerce * _Nonnull)eCommerce onFailure:(void (^ _Nullable)(NSError * _Nonnull))onFailure __attribute__((swift_name("report(eCommerce:onFailure:)")));
 		[Abstract]
 		[Export ("reportECommerce:onFailure:")]
 		void ReportECommerce (YMMECommerce eCommerce, [NullAllowed] Action<NSError> onFailure);
@@ -396,12 +436,20 @@ namespace YandexMetricaIOS
 
 	// @interface YMMUserProfileUpdate : NSObject
 	[BaseType (typeof(NSObject))]
-	public interface YMMUserProfileUpdate
+	interface YMMUserProfileUpdate
 	{
 	}
 
 	// @protocol YMMNameAttribute <NSObject>
-	[Protocol, Model]
+	/*
+  Check whether adding [Model] to this declaration is appropriate.
+  [Model] is used to generate a C# class that implements this protocol,
+  and might be useful for protocols that consumers are supposed to implement,
+  since consumers can subclass the generated class instead of implementing
+  the generated interface. If consumers are not supposed to implement this
+  protocol, then [Model] is redundant and will generate code that will never
+  be used.
+*/[Protocol]
 	[BaseType (typeof(NSObject))]
 	interface YMMNameAttribute
 	{
@@ -412,82 +460,112 @@ namespace YandexMetricaIOS
 
 		// @required -(YMMUserProfileUpdate * _Nonnull)withValueReset;
 		[Abstract]
-		[Export("withValueReset")]
-		YMMUserProfileUpdate WithValueReset();
+		[Export ("withValueReset")]
+		YMMUserProfileUpdate WithValueReset { get; }
 	}
 
-	//// @protocol YMMGenderAttribute <NSObject>
-	//[Protocol, Model]
-	//[BaseType (typeof(NSObject))]
-	//interface YMMGenderAttribute
-	//{
-	//	// @required -(YMMUserProfileUpdate * _Nonnull)withValue:(YMMGenderType)value;
-	//	[Abstract]
-	//	[Export ("withValue:")]
-	//	YMMUserProfileUpdate WithValue (YMMGenderType value);
+	// @protocol YMMGenderAttribute <NSObject>
+	/*
+  Check whether adding [Model] to this declaration is appropriate.
+  [Model] is used to generate a C# class that implements this protocol,
+  and might be useful for protocols that consumers are supposed to implement,
+  since consumers can subclass the generated class instead of implementing
+  the generated interface. If consumers are not supposed to implement this
+  protocol, then [Model] is redundant and will generate code that will never
+  be used.
+*/[Protocol]
+	[BaseType (typeof(NSObject))]
+	interface YMMGenderAttribute
+	{
+		// @required -(YMMUserProfileUpdate * _Nonnull)withValue:(YMMGenderType)value;
+		[Abstract]
+		[Export ("withValue:")]
+		YMMUserProfileUpdate WithValue (YMMGenderType value);
 
-	//	// @required -(YMMUserProfileUpdate * _Nonnull)withValueReset;
-	//	[Abstract]
-	//	[Export ("withValueReset")]
-	//	YMMUserProfileUpdate WithValueReset();
-	//}
+		// @required -(YMMUserProfileUpdate * _Nonnull)withValueReset;
+		[Abstract]
+		[Export ("withValueReset")]
+		YMMUserProfileUpdate WithValueReset { get; }
+	}
 
 	// @protocol YMMBirthDateAttribute <NSObject>
-	[Protocol, Model]
+	/*
+  Check whether adding [Model] to this declaration is appropriate.
+  [Model] is used to generate a C# class that implements this protocol,
+  and might be useful for protocols that consumers are supposed to implement,
+  since consumers can subclass the generated class instead of implementing
+  the generated interface. If consumers are not supposed to implement this
+  protocol, then [Model] is redundant and will generate code that will never
+  be used.
+*/[Protocol]
 	[BaseType (typeof(NSObject))]
 	interface YMMBirthDateAttribute
 	{
 		// @required -(YMMUserProfileUpdate * _Nonnull)withAge:(NSUInteger)value;
 		[Abstract]
 		[Export ("withAge:")]
-		public YMMUserProfileUpdate WithAge (nuint value);
+		YMMUserProfileUpdate WithAge (nuint value);
 
-		// @required -(YMMUserProfileUpdate * _Nonnull)withYear:(NSUInteger)year;
+		// @required -(YMMUserProfileUpdate * _Nonnull)withYear:(NSUInteger)year __attribute__((swift_name("withDate(year:)")));
 		[Abstract]
 		[Export ("withYear:")]
-		 YMMUserProfileUpdate WithYear (nuint year);
+		YMMUserProfileUpdate WithYear (nuint year);
 
-		// @required -(YMMUserProfileUpdate * _Nonnull)withYear:(NSUInteger)year month:(NSUInteger)month;
+		// @required -(YMMUserProfileUpdate * _Nonnull)withYear:(NSUInteger)year month:(NSUInteger)month __attribute__((swift_name("withDate(year:month:)")));
 		[Abstract]
 		[Export ("withYear:month:")]
-		 YMMUserProfileUpdate WithYear (nuint year, nuint month);
+		YMMUserProfileUpdate WithYear (nuint year, nuint month);
 
-		// @required -(YMMUserProfileUpdate * _Nonnull)withYear:(NSUInteger)year month:(NSUInteger)month day:(NSUInteger)day;
+		// @required -(YMMUserProfileUpdate * _Nonnull)withYear:(NSUInteger)year month:(NSUInteger)month day:(NSUInteger)day __attribute__((swift_name("withDate(year:month:day:)")));
 		[Abstract]
 		[Export ("withYear:month:day:")]
-		 YMMUserProfileUpdate WithYear (nuint year, nuint month, nuint day);
+		YMMUserProfileUpdate WithYear (nuint year, nuint month, nuint day);
 
-		// @required -(YMMUserProfileUpdate * _Nonnull)withDateComponents:(NSDateComponents * _Nonnull)dateComponents;
+		// @required -(YMMUserProfileUpdate * _Nonnull)withDateComponents:(NSDateComponents * _Nonnull)dateComponents __attribute__((swift_name("withDate(dateComponents:)")));
 		[Abstract]
 		[Export ("withDateComponents:")]
-		 YMMUserProfileUpdate WithDateComponents (NSDateComponents dateComponents);
+		YMMUserProfileUpdate WithDateComponents (NSDateComponents dateComponents);
 
 		// @required -(YMMUserProfileUpdate * _Nonnull)withValueReset;
 		[Abstract]
-		[Export("withValueReset")]
-		 YMMUserProfileUpdate WithValueReset();
+		[Export ("withValueReset")]
+		YMMUserProfileUpdate WithValueReset { get; }
 	}
 
-	interface IYMMBirthDateAttribute { }
-
 	// @protocol YMMNotificationsEnabledAttribute <NSObject>
-	[Protocol, Model]
-	[BaseType(typeof(NSObject))]
+	/*
+  Check whether adding [Model] to this declaration is appropriate.
+  [Model] is used to generate a C# class that implements this protocol,
+  and might be useful for protocols that consumers are supposed to implement,
+  since consumers can subclass the generated class instead of implementing
+  the generated interface. If consumers are not supposed to implement this
+  protocol, then [Model] is redundant and will generate code that will never
+  be used.
+*/[Protocol]
+	[BaseType (typeof(NSObject))]
 	interface YMMNotificationsEnabledAttribute
 	{
 		// @required -(YMMUserProfileUpdate * _Nonnull)withValue:(BOOL)value;
 		[Abstract]
-		[Export("withValue:")]
-		YMMUserProfileUpdate WithValue(bool value);
+		[Export ("withValue:")]
+		YMMUserProfileUpdate WithValue (bool value);
 
 		// @required -(YMMUserProfileUpdate * _Nonnull)withValueReset;
 		[Abstract]
-		[Export("withValueReset")]
-		YMMUserProfileUpdate WithValueReset();
+		[Export ("withValueReset")]
+		YMMUserProfileUpdate WithValueReset { get; }
 	}
 
 	// @protocol YMMCustomStringAttribute <NSObject>
-	[Protocol, Model]
+	/*
+  Check whether adding [Model] to this declaration is appropriate.
+  [Model] is used to generate a C# class that implements this protocol,
+  and might be useful for protocols that consumers are supposed to implement,
+  since consumers can subclass the generated class instead of implementing
+  the generated interface. If consumers are not supposed to implement this
+  protocol, then [Model] is redundant and will generate code that will never
+  be used.
+*/[Protocol]
 	[BaseType (typeof(NSObject))]
 	interface YMMCustomStringAttribute
 	{
@@ -504,11 +582,19 @@ namespace YandexMetricaIOS
 		// @required -(YMMUserProfileUpdate * _Nonnull)withValueReset;
 		[Abstract]
 		[Export ("withValueReset")]
-		YMMUserProfileUpdate WithValueReset();
-		}
+		YMMUserProfileUpdate WithValueReset { get; }
+	}
 
 	// @protocol YMMCustomNumberAttribute <NSObject>
-	[Protocol, Model]
+	/*
+  Check whether adding [Model] to this declaration is appropriate.
+  [Model] is used to generate a C# class that implements this protocol,
+  and might be useful for protocols that consumers are supposed to implement,
+  since consumers can subclass the generated class instead of implementing
+  the generated interface. If consumers are not supposed to implement this
+  protocol, then [Model] is redundant and will generate code that will never
+  be used.
+*/[Protocol]
 	[BaseType (typeof(NSObject))]
 	interface YMMCustomNumberAttribute
 	{
@@ -525,11 +611,19 @@ namespace YandexMetricaIOS
 		// @required -(YMMUserProfileUpdate * _Nonnull)withValueReset;
 		[Abstract]
 		[Export ("withValueReset")]
-		YMMUserProfileUpdate WithValueReset();
-		}
+		YMMUserProfileUpdate WithValueReset { get; }
+	}
 
 	// @protocol YMMCustomCounterAttribute <NSObject>
-	[Protocol, Model]
+	/*
+  Check whether adding [Model] to this declaration is appropriate.
+  [Model] is used to generate a C# class that implements this protocol,
+  and might be useful for protocols that consumers are supposed to implement,
+  since consumers can subclass the generated class instead of implementing
+  the generated interface. If consumers are not supposed to implement this
+  protocol, then [Model] is redundant and will generate code that will never
+  be used.
+*/[Protocol]
 	[BaseType (typeof(NSObject))]
 	interface YMMCustomCounterAttribute
 	{
@@ -540,7 +634,15 @@ namespace YandexMetricaIOS
 	}
 
 	// @protocol YMMCustomBoolAttribute <NSObject>
-	[Protocol, Model]
+	/*
+  Check whether adding [Model] to this declaration is appropriate.
+  [Model] is used to generate a C# class that implements this protocol,
+  and might be useful for protocols that consumers are supposed to implement,
+  since consumers can subclass the generated class instead of implementing
+  the generated interface. If consumers are not supposed to implement this
+  protocol, then [Model] is redundant and will generate code that will never
+  be used.
+*/[Protocol]
 	[BaseType (typeof(NSObject))]
 	interface YMMCustomBoolAttribute
 	{
@@ -557,8 +659,8 @@ namespace YandexMetricaIOS
 		// @required -(YMMUserProfileUpdate * _Nonnull)withValueReset;
 		[Abstract]
 		[Export ("withValueReset")]
-		YMMUserProfileUpdate WithValueReset();
-		}
+		YMMUserProfileUpdate WithValueReset { get; }
+	}
 
 	// @interface YMMProfileAttribute : NSObject
 	[BaseType (typeof(NSObject))]
@@ -566,23 +668,23 @@ namespace YandexMetricaIOS
 	{
 		// +(id<YMMNameAttribute> _Nonnull)name;
 		[Static]
-		[Export("name")]
-		YMMNameAttribute Name();
+		[Export ("name")]
+		YMMNameAttribute Name { get; }
 
 		// +(id<YMMGenderAttribute> _Nonnull)gender;
-		//[Static]
-		//[Export("gender")]
-		////YMMGenderAttribute Gender();
+		[Static]
+		[Export ("gender")]
+		YMMGenderAttribute Gender { get; }
 
 		// +(id<YMMBirthDateAttribute> _Nonnull)birthDate;
 		[Static]
-		[Export("birthDate")]
-		IYMMBirthDateAttribute BirthDate();
+		[Export ("birthDate")]
+		YMMBirthDateAttribute BirthDate { get; }
 
 		// +(id<YMMNotificationsEnabledAttribute> _Nonnull)notificationsEnabled;
 		[Static]
 		[Export ("notificationsEnabled")]
-		YMMNotificationsEnabledAttribute NotificationsEnabled();
+		YMMNotificationsEnabledAttribute NotificationsEnabled { get; }
 
 		// +(id<YMMCustomStringAttribute> _Nonnull)customString:(NSString * _Nonnull)name;
 		[Static]
@@ -801,8 +903,8 @@ namespace YandexMetricaIOS
 		IntPtr Constructor (string[] categoryComponents);
 
 		// -(instancetype _Nonnull)initWithSearchQuery:(NSString * _Nonnull)searchQuery;
-		[Export ("initWithSearchQuery:")]
-		IntPtr Constructor2 (string searchQuery);
+		//[Export ("initWithSearchQuery:")]
+		//IntPtr Constructor (string searchQuery);
 
 		// -(instancetype _Nonnull)initWithPayload:(NSDictionary<NSString *,NSString *> * _Nonnull)payload;
 		[Export ("initWithPayload:")]
@@ -934,37 +1036,37 @@ namespace YandexMetricaIOS
 	[DisableDefaultCtor]
 	interface YMMECommerce
 	{
-		// +(instancetype _Nonnull)showScreenEventWithScreen:(YMMECommerceScreen * _Nonnull)screen;
+		// +(instancetype _Nonnull)showScreenEventWithScreen:(YMMECommerceScreen * _Nonnull)screen __attribute__((swift_name("showScreenEvent(screen:)")));
 		[Static]
 		[Export ("showScreenEventWithScreen:")]
 		YMMECommerce ShowScreenEventWithScreen (YMMECommerceScreen screen);
 
-		// +(instancetype _Nonnull)showProductCardEventWithProduct:(YMMECommerceProduct * _Nonnull)product screen:(YMMECommerceScreen * _Nonnull)screen;
+		// +(instancetype _Nonnull)showProductCardEventWithProduct:(YMMECommerceProduct * _Nonnull)product screen:(YMMECommerceScreen * _Nonnull)screen __attribute__((swift_name("showProductCardEvent(product:screen:)")));
 		[Static]
 		[Export ("showProductCardEventWithProduct:screen:")]
 		YMMECommerce ShowProductCardEventWithProduct (YMMECommerceProduct product, YMMECommerceScreen screen);
 
-		// +(instancetype _Nonnull)showProductDetailsEventWithProduct:(YMMECommerceProduct * _Nonnull)product referrer:(YMMECommerceReferrer * _Nullable)referrer;
+		// +(instancetype _Nonnull)showProductDetailsEventWithProduct:(YMMECommerceProduct * _Nonnull)product referrer:(YMMECommerceReferrer * _Nullable)referrer __attribute__((swift_name("showProductDetailsEvent(product:referrer:)")));
 		[Static]
 		[Export ("showProductDetailsEventWithProduct:referrer:")]
 		YMMECommerce ShowProductDetailsEventWithProduct (YMMECommerceProduct product, [NullAllowed] YMMECommerceReferrer referrer);
 
-		// +(instancetype _Nonnull)addCartItemEventWithItem:(YMMECommerceCartItem * _Nonnull)item;
+		// +(instancetype _Nonnull)addCartItemEventWithItem:(YMMECommerceCartItem * _Nonnull)item __attribute__((swift_name("addCartItemEvent(cartItem:)")));
 		[Static]
 		[Export ("addCartItemEventWithItem:")]
 		YMMECommerce AddCartItemEventWithItem (YMMECommerceCartItem item);
 
-		// +(instancetype _Nonnull)removeCartItemEventWithItem:(YMMECommerceCartItem * _Nonnull)item;
+		// +(instancetype _Nonnull)removeCartItemEventWithItem:(YMMECommerceCartItem * _Nonnull)item __attribute__((swift_name("removeCartItemEvent(cartItem:)")));
 		[Static]
 		[Export ("removeCartItemEventWithItem:")]
 		YMMECommerce RemoveCartItemEventWithItem (YMMECommerceCartItem item);
 
-		// +(instancetype _Nonnull)beginCheckoutEventWithOrder:(YMMECommerceOrder * _Nonnull)order;
+		// +(instancetype _Nonnull)beginCheckoutEventWithOrder:(YMMECommerceOrder * _Nonnull)order __attribute__((swift_name("beginCheckoutEvent(order:)")));
 		[Static]
 		[Export ("beginCheckoutEventWithOrder:")]
 		YMMECommerce BeginCheckoutEventWithOrder (YMMECommerceOrder order);
 
-		// +(instancetype _Nonnull)purchaseEventWithOrder:(YMMECommerceOrder * _Nonnull)order;
+		// +(instancetype _Nonnull)purchaseEventWithOrder:(YMMECommerceOrder * _Nonnull)order __attribute__((swift_name("purchaseEvent(order:)")));
 		[Static]
 		[Export ("purchaseEventWithOrder:")]
 		YMMECommerce PurchaseEventWithOrder (YMMECommerceOrder order);

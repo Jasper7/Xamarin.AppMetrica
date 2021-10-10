@@ -17,4 +17,4 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
-[assembly: AssemblyVersion("3.15.1")]
+[assembly: AssemblyVersion("4.0.0")]

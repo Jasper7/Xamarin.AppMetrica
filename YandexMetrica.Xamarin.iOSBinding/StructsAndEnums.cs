@@ -3,14 +3,15 @@ using ObjCRuntime;
 
 namespace YandexMetricaIOS
 {
+	[Flags]
 	[Native]
 	public enum YMMErrorReportingOptions : ulong
 	{
-		YMMErrorReportingOptionsNoBacktrace = 1 << 0
+		YMMErrorReportingOptionsNoBacktrace = 1uL << 0
 	}
 
 	[Native]
-	public enum YMMYandexMetricaEventErrorCode : ulong
+	public enum YMMYandexMetricaEventErrorCode : long
 	{
 		InitializationError = 1000,
 		InvalidName = 1001,
