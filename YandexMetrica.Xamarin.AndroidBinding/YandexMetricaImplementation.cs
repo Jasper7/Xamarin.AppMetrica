@@ -175,10 +175,6 @@ namespace YandexMetricaAndroid
             {
                 builder.WithLogs();
             }
-            if (self.InstalledAppCollecting.HasValue)
-            {
-                builder.WithInstalledAppCollecting(self.InstalledAppCollecting.Value);
-            }
             if (self.StatisticsSending.HasValue)
             {
                 builder.WithStatisticsSending(self.StatisticsSending.Value);

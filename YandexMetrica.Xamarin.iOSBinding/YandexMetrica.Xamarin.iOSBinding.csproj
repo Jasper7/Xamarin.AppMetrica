@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\NuGet.Build.Packaging.0.2.5-dev.8\build\NuGet.Build.Packaging.props" Condition="Exists('..\packages\NuGet.Build.Packaging.0.2.5-dev.8\build\NuGet.Build.Packaging.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -10,6 +11,16 @@
     <IPhoneResourcePrefix>Resources</IPhoneResourcePrefix>
     <AssemblyName>YandexMetrica.Xamarin.iOS</AssemblyName>
     <NativeAppMetricaSdkVersion>4.0.0</NativeAppMetricaSdkVersion>
+    <PackageId>Xamarin.AppMetrica.iOS</PackageId>
+    <PackageVersion>4.0.0.0</PackageVersion>
+    <Authors>Alekseev Aleksandr</Authors>
+    <PackageProjectUrl>https://github.com/Jasper7/Xamarin.AppMetrica</PackageProjectUrl>
+    <Description>AppMetrica library for Xamarin iOS</Description>
+    <ReleaseVersion>4.0.0</ReleaseVersion>
+    <Owners>Aleksandr Alekseev</Owners>
+    <PackageReleaseNotes>Binding AppMetrica 4.0.0</PackageReleaseNotes>
+    <PackageTags>yandex,metrica,appmetrica,яндекс,аппметрика,метрика,analytics,яндекс.метрика,sdk,ios</PackageTags>
+    <Title>AppMetrica library for Xamarin iOS</Title>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -32,6 +43,13 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <LangVersion>5</LangVersion>
   </PropertyGroup>
+  <PropertyGroup>
+    <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Include="LICENSE.txt" Pack="true" PackagePath="" />
+  </ItemGroup>
+
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="Xamarin.iOS" />
@@ -76,4 +94,8 @@
       <LinkerFlags>-lz -lc++ -lsqlite3 -ObjC</LinkerFlags>
     </NativeReference>
   </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="packages.config" />
+  </ItemGroup>
+  <Import Project="..\packages\NuGet.Build.Packaging.0.2.5-dev.8\build\NuGet.Build.Packaging.targets" Condition="Exists('..\packages\NuGet.Build.Packaging.0.2.5-dev.8\build\NuGet.Build.Packaging.targets')" />
 </Project>
