@@ -23,15 +23,7 @@ namespace YandexMetricaIOS
 	}
 
 	// @protocol YMMErrorRepresentable <NSObject>
-	/*
-  Check whether adding [Model] to this declaration is appropriate.
-  [Model] is used to generate a C# class that implements this protocol,
-  and might be useful for protocols that consumers are supposed to implement,
-  since consumers can subclass the generated class instead of implementing
-  the generated interface. If consumers are not supposed to implement this
-  protocol, then [Model] is redundant and will generate code that will never
-  be used.
-*/[Protocol]
+	[Protocol, Model]
 	[BaseType (typeof(NSObject))]
 	interface YMMErrorRepresentable
 	{
@@ -332,15 +324,7 @@ namespace YandexMetricaIOS
 	}
 
 	// @protocol YMMYandexMetricaReporting <NSObject>
-	/*
-  Check whether adding [Model] to this declaration is appropriate.
-  [Model] is used to generate a C# class that implements this protocol,
-  and might be useful for protocols that consumers are supposed to implement,
-  since consumers can subclass the generated class instead of implementing
-  the generated interface. If consumers are not supposed to implement this
-  protocol, then [Model] is redundant and will generate code that will never
-  be used.
-*/[Protocol]
+	[Protocol, Model]
 	[BaseType (typeof(NSObject))]
 	interface YMMYandexMetricaReporting
 	{
@@ -441,15 +425,7 @@ namespace YandexMetricaIOS
 	}
 
 	// @protocol YMMNameAttribute <NSObject>
-	/*
-  Check whether adding [Model] to this declaration is appropriate.
-  [Model] is used to generate a C# class that implements this protocol,
-  and might be useful for protocols that consumers are supposed to implement,
-  since consumers can subclass the generated class instead of implementing
-  the generated interface. If consumers are not supposed to implement this
-  protocol, then [Model] is redundant and will generate code that will never
-  be used.
-*/[Protocol]
+	[Protocol, Model]
 	[BaseType (typeof(NSObject))]
 	interface YMMNameAttribute
 	{
@@ -461,19 +437,13 @@ namespace YandexMetricaIOS
 		// @required -(YMMUserProfileUpdate * _Nonnull)withValueReset;
 		[Abstract]
 		[Export ("withValueReset")]
-		YMMUserProfileUpdate WithValueReset { get; }
+		YMMUserProfileUpdate WithValueReset ();
 	}
 
+	interface IYMMNameAttribute { }
+
 	// @protocol YMMGenderAttribute <NSObject>
-	/*
-  Check whether adding [Model] to this declaration is appropriate.
-  [Model] is used to generate a C# class that implements this protocol,
-  and might be useful for protocols that consumers are supposed to implement,
-  since consumers can subclass the generated class instead of implementing
-  the generated interface. If consumers are not supposed to implement this
-  protocol, then [Model] is redundant and will generate code that will never
-  be used.
-*/[Protocol]
+	[Protocol, Model(Name = "YMMGenderAttributeNative")]
 	[BaseType (typeof(NSObject))]
 	interface YMMGenderAttribute
 	{
@@ -485,19 +455,13 @@ namespace YandexMetricaIOS
 		// @required -(YMMUserProfileUpdate * _Nonnull)withValueReset;
 		[Abstract]
 		[Export ("withValueReset")]
-		YMMUserProfileUpdate WithValueReset { get; }
+		YMMUserProfileUpdate WithValueReset ();
 	}
 
+	interface IYMMGenderAttribute { }
+
 	// @protocol YMMBirthDateAttribute <NSObject>
-	/*
-  Check whether adding [Model] to this declaration is appropriate.
-  [Model] is used to generate a C# class that implements this protocol,
-  and might be useful for protocols that consumers are supposed to implement,
-  since consumers can subclass the generated class instead of implementing
-  the generated interface. If consumers are not supposed to implement this
-  protocol, then [Model] is redundant and will generate code that will never
-  be used.
-*/[Protocol]
+	[Protocol, Model]
 	[BaseType (typeof(NSObject))]
 	interface YMMBirthDateAttribute
 	{
@@ -529,19 +493,13 @@ namespace YandexMetricaIOS
 		// @required -(YMMUserProfileUpdate * _Nonnull)withValueReset;
 		[Abstract]
 		[Export ("withValueReset")]
-		YMMUserProfileUpdate WithValueReset { get; }
+		YMMUserProfileUpdate WithValueReset ();
 	}
 
+	interface IYMMBirthDateAttribute { }
+
 	// @protocol YMMNotificationsEnabledAttribute <NSObject>
-	/*
-  Check whether adding [Model] to this declaration is appropriate.
-  [Model] is used to generate a C# class that implements this protocol,
-  and might be useful for protocols that consumers are supposed to implement,
-  since consumers can subclass the generated class instead of implementing
-  the generated interface. If consumers are not supposed to implement this
-  protocol, then [Model] is redundant and will generate code that will never
-  be used.
-*/[Protocol]
+	[Protocol, Model]
 	[BaseType (typeof(NSObject))]
 	interface YMMNotificationsEnabledAttribute
 	{
@@ -553,19 +511,13 @@ namespace YandexMetricaIOS
 		// @required -(YMMUserProfileUpdate * _Nonnull)withValueReset;
 		[Abstract]
 		[Export ("withValueReset")]
-		YMMUserProfileUpdate WithValueReset { get; }
+		YMMUserProfileUpdate WithValueReset ();
 	}
 
+	interface IYMMNotificationsEnabledAttribute { }
+
 	// @protocol YMMCustomStringAttribute <NSObject>
-	/*
-  Check whether adding [Model] to this declaration is appropriate.
-  [Model] is used to generate a C# class that implements this protocol,
-  and might be useful for protocols that consumers are supposed to implement,
-  since consumers can subclass the generated class instead of implementing
-  the generated interface. If consumers are not supposed to implement this
-  protocol, then [Model] is redundant and will generate code that will never
-  be used.
-*/[Protocol]
+	[Protocol, Model]
 	[BaseType (typeof(NSObject))]
 	interface YMMCustomStringAttribute
 	{
@@ -582,19 +534,13 @@ namespace YandexMetricaIOS
 		// @required -(YMMUserProfileUpdate * _Nonnull)withValueReset;
 		[Abstract]
 		[Export ("withValueReset")]
-		YMMUserProfileUpdate WithValueReset { get; }
+		YMMUserProfileUpdate WithValueReset ();
 	}
 
+	interface IYMMCustomStringAttribute { }
+
 	// @protocol YMMCustomNumberAttribute <NSObject>
-	/*
-  Check whether adding [Model] to this declaration is appropriate.
-  [Model] is used to generate a C# class that implements this protocol,
-  and might be useful for protocols that consumers are supposed to implement,
-  since consumers can subclass the generated class instead of implementing
-  the generated interface. If consumers are not supposed to implement this
-  protocol, then [Model] is redundant and will generate code that will never
-  be used.
-*/[Protocol]
+	[Protocol, Model]
 	[BaseType (typeof(NSObject))]
 	interface YMMCustomNumberAttribute
 	{
@@ -611,19 +557,13 @@ namespace YandexMetricaIOS
 		// @required -(YMMUserProfileUpdate * _Nonnull)withValueReset;
 		[Abstract]
 		[Export ("withValueReset")]
-		YMMUserProfileUpdate WithValueReset { get; }
+		YMMUserProfileUpdate WithValueReset ();
 	}
 
+	interface IYMMCustomNumberAttribute { }
+
 	// @protocol YMMCustomCounterAttribute <NSObject>
-	/*
-  Check whether adding [Model] to this declaration is appropriate.
-  [Model] is used to generate a C# class that implements this protocol,
-  and might be useful for protocols that consumers are supposed to implement,
-  since consumers can subclass the generated class instead of implementing
-  the generated interface. If consumers are not supposed to implement this
-  protocol, then [Model] is redundant and will generate code that will never
-  be used.
-*/[Protocol]
+	[Protocol, Model]
 	[BaseType (typeof(NSObject))]
 	interface YMMCustomCounterAttribute
 	{
@@ -633,16 +573,10 @@ namespace YandexMetricaIOS
 		YMMUserProfileUpdate WithDelta (double value);
 	}
 
+	interface IYMMCustomCounterAttribute { }
+
 	// @protocol YMMCustomBoolAttribute <NSObject>
-	/*
-  Check whether adding [Model] to this declaration is appropriate.
-  [Model] is used to generate a C# class that implements this protocol,
-  and might be useful for protocols that consumers are supposed to implement,
-  since consumers can subclass the generated class instead of implementing
-  the generated interface. If consumers are not supposed to implement this
-  protocol, then [Model] is redundant and will generate code that will never
-  be used.
-*/[Protocol]
+	[Protocol, Model]
 	[BaseType (typeof(NSObject))]
 	interface YMMCustomBoolAttribute
 	{
@@ -659,8 +593,10 @@ namespace YandexMetricaIOS
 		// @required -(YMMUserProfileUpdate * _Nonnull)withValueReset;
 		[Abstract]
 		[Export ("withValueReset")]
-		YMMUserProfileUpdate WithValueReset { get; }
+		YMMUserProfileUpdate WithValueReset ();
 	}
+
+	interface IYMMCustomBoolAttribute { }
 
 	// @interface YMMProfileAttribute : NSObject
 	[BaseType (typeof(NSObject))]
@@ -669,42 +605,42 @@ namespace YandexMetricaIOS
 		// +(id<YMMNameAttribute> _Nonnull)name;
 		[Static]
 		[Export ("name")]
-		YMMNameAttribute Name { get; }
+		IYMMNameAttribute Name { get; }
 
 		// +(id<YMMGenderAttribute> _Nonnull)gender;
 		[Static]
 		[Export ("gender")]
-		YMMGenderAttribute Gender { get; }
+		IYMMGenderAttribute Gender { get; }
 
 		// +(id<YMMBirthDateAttribute> _Nonnull)birthDate;
 		[Static]
 		[Export ("birthDate")]
-		YMMBirthDateAttribute BirthDate { get; }
+		IYMMBirthDateAttribute BirthDate { get; }
 
 		// +(id<YMMNotificationsEnabledAttribute> _Nonnull)notificationsEnabled;
 		[Static]
 		[Export ("notificationsEnabled")]
-		YMMNotificationsEnabledAttribute NotificationsEnabled { get; }
+		IYMMNotificationsEnabledAttribute NotificationsEnabled { get; }
 
 		// +(id<YMMCustomStringAttribute> _Nonnull)customString:(NSString * _Nonnull)name;
 		[Static]
 		[Export ("customString:")]
-		YMMCustomStringAttribute CustomString (string name);
+		IYMMCustomStringAttribute CustomString (string name);
 
 		// +(id<YMMCustomNumberAttribute> _Nonnull)customNumber:(NSString * _Nonnull)name;
 		[Static]
 		[Export ("customNumber:")]
-		YMMCustomNumberAttribute CustomNumber (string name);
+		IYMMCustomNumberAttribute CustomNumber (string name);
 
 		// +(id<YMMCustomCounterAttribute> _Nonnull)customCounter:(NSString * _Nonnull)name;
 		[Static]
 		[Export ("customCounter:")]
-		YMMCustomCounterAttribute CustomCounter (string name);
+		IYMMCustomCounterAttribute CustomCounter (string name);
 
 		// +(id<YMMCustomBoolAttribute> _Nonnull)customBool:(NSString * _Nonnull)name;
 		[Static]
 		[Export ("customBool:")]
-		YMMCustomBoolAttribute CustomBool (string name);
+		IYMMCustomBoolAttribute CustomBool (string name);
 	}
 
 	// @interface YMMUserProfile : NSObject <NSCopying, NSMutableCopying>
