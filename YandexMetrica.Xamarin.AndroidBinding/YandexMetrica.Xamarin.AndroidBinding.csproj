@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\packages\NuGet.Build.Packaging.0.2.5-dev.8\build\NuGet.Build.Packaging.props" Condition="Exists('..\packages\NuGet.Build.Packaging.0.2.5-dev.8\build\NuGet.Build.Packaging.props')" />
+  <Import Project="..\packages\NuGet.Build.Packaging.0.2.2\build\NuGet.Build.Packaging.props" Condition="Exists('..\packages\NuGet.Build.Packaging.0.2.2\build\NuGet.Build.Packaging.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Release</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -11,19 +11,24 @@
     <MonoAndroidResourcePrefix>Resources</MonoAndroidResourcePrefix>
     <MonoAndroidAssetsPrefix>Assets</MonoAndroidAssetsPrefix>
     <AssemblyName>YandexMetrica.Xamarin.Android</AssemblyName>
-    <ReleaseVersion>4.0.0</ReleaseVersion>
+    <ReleaseVersion>4.0.0.1</ReleaseVersion>
     <TargetFrameworkVersion>v11.0</TargetFrameworkVersion>
     <AndroidClassParser>class-parse</AndroidClassParser>
     <PackageId>Xamarin.AppMetrica.Android</PackageId>
-    <PackageVersion>4.0.0.0</PackageVersion>
+    <PackageVersion>4.0.0.1</PackageVersion>
     <Authors>Alekseev Aleksandr</Authors>
     <Description>AppMetrica library for Xamarin Android</Description>
     <Owners>Alekseev Aleksandr</Owners>
     <PackageProjectUrl>https://github.com/Jasper7/Xamarin.AppMetrica</PackageProjectUrl>
-    <PackageReleaseNotes>Binding AppMetrica 4.0.0</PackageReleaseNotes>
+    <PackageReleaseNotes>Thanks Entdark developer for this release!
+
+Changes:
+ - Bug fix update user properties
+ - Migrated from PCL to .NET Standard</PackageReleaseNotes>
     <PackageTags>yandex,metrica,appmetrica,яндекс,аппметрика,метрика,analytics,яндекс.метрика,sdk,ios</PackageTags>
     <Title>AppMetrica library for Xamarin Android</Title>
     <PackOnBuild>true</PackOnBuild>
+    <PackageIconUrl>https://avatars.mds.yandex.net/get-adv/50995/2a00000162aee397ec2a1e15f59de1a75163/orig</PackageIconUrl>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -91,5 +96,5 @@
   <ItemGroup>
     <LibraryProjectZip Include="Jars\mobmetricalib-4.0.0.aar" />
   </ItemGroup>
-  <Import Project="..\packages\NuGet.Build.Packaging.0.2.5-dev.8\build\NuGet.Build.Packaging.targets" Condition="Exists('..\packages\NuGet.Build.Packaging.0.2.5-dev.8\build\NuGet.Build.Packaging.targets')" />
+  <Import Project="..\packages\NuGet.Build.Packaging.0.2.2\build\NuGet.Build.Packaging.targets" Condition="Exists('..\packages\NuGet.Build.Packaging.0.2.2\build\NuGet.Build.Packaging.targets')" />
 </Project>
