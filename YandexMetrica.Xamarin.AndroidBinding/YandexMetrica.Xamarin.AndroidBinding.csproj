@@ -11,7 +11,7 @@
     <MonoAndroidAssetsPrefix>Assets</MonoAndroidAssetsPrefix>
     <AssemblyName>YandexMetrica.Xamarin.Android</AssemblyName>
     <ReleaseVersion>4.0.0.1</ReleaseVersion>
-    <TargetFrameworkVersion>v11.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v12.0</TargetFrameworkVersion>
     <AndroidClassParser>class-parse</AndroidClassParser>
     <PackageId>Xamarin.AppMetrica.Android</PackageId>
     <PackageVersion>4.0.0.1</PackageVersion>
@@ -70,6 +70,7 @@ Changes:
   <ItemGroup>
     <None Include="Additions\AboutAdditions.txt" />
     <None Include="Jars\AboutJars.txt" />
+    <LibraryProjectZip Include="Jars\mobmetricalib-5.0.1.aar" />
     <None Include="LICENSE.txt">
       <Pack>true</Pack>
       <PackagePath>
@@ -95,13 +96,13 @@ Changes:
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <LibraryProjectZip Include="Jars\mobmetricalib-4.0.0.aar" />
-  </ItemGroup>
-  <ItemGroup>
     <PackageReference Include="NuGet.Build.Packaging">
       <Version>0.2.2</Version>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Xamarin.GooglePlayServices.AppSet">
+      <Version>16.0.2.2</Version>
     </PackageReference>
   </ItemGroup>
 </Project>
