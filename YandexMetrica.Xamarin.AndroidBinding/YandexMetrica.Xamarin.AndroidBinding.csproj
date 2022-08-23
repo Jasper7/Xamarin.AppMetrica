@@ -70,7 +70,7 @@ Changes:
   <ItemGroup>
     <None Include="Additions\AboutAdditions.txt" />
     <None Include="Jars\AboutJars.txt" />
-    <LibraryProjectZip Include="Jars\mobmetricalib-5.0.1.aar" />
+    <LibraryProjectZip Include="Jars\mobmetricalib-5.0.1_patched.aar" />
     <None Include="LICENSE.txt">
       <Pack>true</Pack>
       <PackagePath>
