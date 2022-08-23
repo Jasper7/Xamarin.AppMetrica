@@ -11,4 +11,6 @@
     </add-node>
     
     <remove-node path="/api/package[@name='com.google.protobuf.nano.ym']" />
+
+	<remove-node path="/api/package[@name='com.yandex.metrica.impl.ob']/class"/>
 </metadata>
