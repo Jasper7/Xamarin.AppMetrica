@@ -1,87 +1,22 @@
-<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\packages\NuGet.Build.Packaging.0.2.2\build\NuGet.Build.Packaging.props" Condition="Exists('..\packages\NuGet.Build.Packaging.0.2.2\build\NuGet.Build.Packaging.props')" />
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectTypeGuids>{8FFB629D-F513-41CE-95D2-7ECE97B6EEEC};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <ProjectGuid>{31A0AF42-B113-40E3-9F0F-9CE6C9D0301A}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <RootNamespace>YandexMetricaIOS</RootNamespace>
-    <IPhoneResourcePrefix>Resources</IPhoneResourcePrefix>
-    <AssemblyName>YandexMetrica.Xamarin.iOS</AssemblyName>
+    <TargetFramework>net7.0-ios</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>true</ImplicitUsings>
+    <IsBindingProject>true</IsBindingProject>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <NoBindingEmbedding>false</NoBindingEmbedding>
     <NativeAppMetricaSdkVersion>4.0.0</NativeAppMetricaSdkVersion>
-    <PackageId>Xamarin.AppMetrica.iOS</PackageId>
-    <PackageVersion>4.0.0.1</PackageVersion>
-    <Authors>Alekseev Aleksandr</Authors>
-    <PackageProjectUrl>https://github.com/Jasper7/Xamarin.AppMetrica</PackageProjectUrl>
-    <Description>AppMetrica library for Xamarin iOS</Description>
-    <ReleaseVersion>4.0.0.1</ReleaseVersion>
-    <Owners>Aleksandr Alekseev</Owners>
-    <PackageReleaseNotes>Thanks Entdark developer for this release!
-
-Changes:
- - Bug fix update user properties
- - Migrated from PCL to .NET Standard</PackageReleaseNotes>
-    <PackageTags>yandex,metrica,appmetrica,яндекс,аппметрика,метрика,analytics,яндекс.метрика,sdk,ios</PackageTags>
-    <Title>AppMetrica library for Xamarin iOS</Title>
-    <PackageIconUrl>https://avatars.mds.yandex.net/get-adv/50995/2a00000162aee397ec2a1e15f59de1a75163/orig</PackageIconUrl>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>portable</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug</OutputPath>
-    <DefineConstants>DEBUG;</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <ConsolePause>false</ConsolePause>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <LangVersion>5</LangVersion>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release</OutputPath>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <ConsolePause>false</ConsolePause>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <LangVersion>5</LangVersion>
-  </PropertyGroup>
-  <PropertyGroup>
-    <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
-  </PropertyGroup>
-  <ItemGroup>
-    <None Include="LICENSE.txt" Pack="true" PackagePath="" />
-  </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="Xamarin.iOS" />
+    <ProjectReference Include="..\YandexMetrica.Xamarin.PCL\YandexMetrica.Xamarin.PCL.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Resources\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="YandexMetricaImplementation.cs" />
-    <Compile Include="..\SharedAssemblyInfo.cs">
-      <Link>Properties\SharedAssemblyInfo.cs</Link>
-    </Compile>
-    <Compile Include="YandexMetricaUserProfileImplementation.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ObjcBindingCoreSource Include="StructsAndEnums.cs" />
-  </ItemGroup>
-  <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.ObjCBinding.CSharp.targets" />
   <ItemGroup>
     <ObjcBindingApiDefinition Include="ApiDefinitions.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\YandexMetrica.Xamarin.PCL\YandexMetrica.Xamarin.PCL.csproj">
-      <Project>{2220CE11-BFFD-4A34-82AC-5A7469A39828}</Project>
-      <Name>YandexMetrica.Xamarin.PCL</Name>
-    </ProjectReference>
+    <ObjcBindingCoreSource Include="StructsAndEnums.cs" />
   </ItemGroup>
   <ItemGroup>
     <NativeReference Include="Libs\libYandexMobileMetrica-$(NativeAppMetricaSdkVersion).a">
@@ -100,7 +35,22 @@ Changes:
     </NativeReference>
   </ItemGroup>
   <ItemGroup>
-    <BundleResource Include="packages.config" />
+    <None Remove="Libs\**" />
   </ItemGroup>
-  <Import Project="..\packages\NuGet.Build.Packaging.0.2.2\build\NuGet.Build.Packaging.targets" Condition="Exists('..\packages\NuGet.Build.Packaging.0.2.2\build\NuGet.Build.Packaging.targets')" />
+  <ItemGroup>
+    <None Remove="Headers\**" />
+    <None Remove="metrica-sample-ios\**" />
+    <None Remove="MobileMetricaSample\**" />
+    <None Remove="MobileMetricaSampleToday\**" />
+    <None Remove="Pods\**" />
+    <None Remove="MobileMetricaSample.xcodeproj\**" />
+    <None Remove="MobileMetricaSample.xcworkspace\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="generate-binding.sh" />
+    <None Remove="LICENSE.txt" />
+    <None Remove="Podfile" />
+    <None Remove="Podfile.lock" />
+    <None Remove="update-lib.sh" />
+  </ItemGroup>
 </Project>
