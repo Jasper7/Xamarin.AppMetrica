@@ -14,7 +14,6 @@
     <AssemblyName>YandexMetrica.Identifiers.Xamarin.AndroidBinding</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <Deterministic>True</Deterministic>
-    <AndroidUseLatestPlatformSdk>false</AndroidUseLatestPlatformSdk>
     <TargetFrameworkVersion>v12.0</TargetFrameworkVersion>
     <AndroidClassParser>class-parse</AndroidClassParser>
     <AndroidCodegenTarget>XamarinAndroid</AndroidCodegenTarget>
