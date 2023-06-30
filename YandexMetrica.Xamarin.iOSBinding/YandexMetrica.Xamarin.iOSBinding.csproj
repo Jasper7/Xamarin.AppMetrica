@@ -18,8 +18,9 @@
     <Owners>Aleksandr Alekseev</Owners>
     <PackageReleaseNotes>
 Changes:
- - Update AppMetrica iOS to 4.5.0 version</PackageReleaseNotes>
- - Support only Device
+ - Update AppMetrica iOS to 4.5.0 version
+ - Support only Device</PackageReleaseNotes>
+ 
     <PackageTags>yandex,metrica,appmetrica,яндекс,аппметрика,метрика,analytics,яндекс.метрика,sdk,ios</PackageTags>
     <Title>AppMetrica library for Xamarin iOS</Title>
     <PackageIconUrl>https://avatars.mds.yandex.net/get-adv/50995/2a00000162aee397ec2a1e15f59de1a75163/orig</PackageIconUrl>

@@ -10,8 +10,8 @@ Documentation available on [AppMetrica official site] [DOCUMENTATION].
 
 ## Changelog
 
-### Version 4.0.0
-* Binding AppMetrica SDK versions (iOS 4.0.0, Android 4.0.0).
+### Versions
+* Binding AppMetrica SDK versions (iOS 4.5.0, Android 5.0.1).
 
 Using as-is
 
