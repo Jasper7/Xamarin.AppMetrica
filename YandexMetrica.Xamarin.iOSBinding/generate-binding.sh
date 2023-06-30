@@ -14,4 +14,4 @@ if [ -z "$SDK" ]; then
 fi
 
 echo "SDK used: ${SDK}"
-sharpie bind -output ./ -namespace YandexMetricaIOS -sdk "${SDK}" -scope Headers/YandexMobileMetrica Headers/YandexMobileMetrica/YandexMobileMetrica.h
+sharpie bind -output ./ -namespace YandexMetricaIOS -sdk "${SDK}" -scope Libs/YandexMobileMetrica.xcframework/ios-arm64_armv7/YandexMobileMetrica.framework Libs/YandexMobileMetrica.xcframework/ios-arm64_armv7/YandexMobileMetrica.framework/Headers/YandexMobileMetrica.h

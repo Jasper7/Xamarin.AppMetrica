@@ -19,7 +19,9 @@ namespace YandexMetricaIOS
 		InvalidRevenueInfo = 1003,
 		EmptyUserProfile = 1004,
 		NoCrashLibrary = 1005,
-		InternalInconsistency = 1006
+		InternalInconsistency = 1006,
+		InvalidBacktrace = 1007,
+		InvalidAdRevenueInfo = 1008
 	}
 
 	[Native]
@@ -28,5 +30,17 @@ namespace YandexMetricaIOS
 		Male,
 		Female,
 		Other
+	}
+
+	[Native]
+	public enum YMMAdType : ulong
+	{
+		Unknown = 0,
+		Native = 1,
+		Banner = 2,
+		Rewarded = 3,
+		Interstitial = 4,
+		Mrec = 5,
+		Other = 6
 	}
 }

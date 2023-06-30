@@ -9,19 +9,17 @@
     <RootNamespace>YandexMetricaIOS</RootNamespace>
     <IPhoneResourcePrefix>Resources</IPhoneResourcePrefix>
     <AssemblyName>YandexMetrica.Xamarin.iOS</AssemblyName>
-    <NativeAppMetricaSdkVersion>4.0.0</NativeAppMetricaSdkVersion>
+    <NativeAppMetricaSdkVersion>4.5.0</NativeAppMetricaSdkVersion>
     <PackageId>Xamarin.AppMetrica.iOS</PackageId>
-    <PackageVersion>4.0.0.1</PackageVersion>
+    <PackageVersion>4.5.0</PackageVersion>
     <Authors>Alekseev Aleksandr</Authors>
     <PackageProjectUrl>https://github.com/Jasper7/Xamarin.AppMetrica</PackageProjectUrl>
     <Description>AppMetrica library for Xamarin iOS</Description>
-    <ReleaseVersion>4.0.0.1</ReleaseVersion>
     <Owners>Aleksandr Alekseev</Owners>
-    <PackageReleaseNotes>Thanks Entdark developer for this release!
-
+    <PackageReleaseNotes>
 Changes:
- - Bug fix update user properties
- - Migrated from PCL to .NET Standard</PackageReleaseNotes>
+ - Update AppMetrica iOS to 4.5.0 version</PackageReleaseNotes>
+ - Support only Device
     <PackageTags>yandex,metrica,appmetrica,яндекс,аппметрика,метрика,analytics,яндекс.метрика,sdk,ios</PackageTags>
     <Title>AppMetrica library for Xamarin iOS</Title>
     <PackageIconUrl>https://avatars.mds.yandex.net/get-adv/50995/2a00000162aee397ec2a1e15f59de1a75163/orig</PackageIconUrl>
@@ -48,6 +46,7 @@ Changes:
     <ConsolePause>false</ConsolePause>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <LangVersion>5</LangVersion>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
   <PropertyGroup>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
@@ -84,19 +83,19 @@ Changes:
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <NativeReference Include="Libs\libYandexMobileMetrica-$(NativeAppMetricaSdkVersion).a">
-      <Kind>Static</Kind>
-      <Frameworks>SystemConfiguration Security UIKit Foundation CoreTelephony CoreLocation CoreGraphics AdSupport</Frameworks>
+    <NativeReference Include="Libs/YandexMobileMetrica.xcframework/ios-arm64_armv7/YandexMobileMetrica.framework">
+      <Kind>Framework</Kind>
       <ForceLoad>True</ForceLoad>
-      <WeakFrameworks>iAd</WeakFrameworks>
+      <Frameworks>SystemConfiguration Security UIKit Foundation CoreTelephony CoreLocation CoreGraphics AdSupport</Frameworks>
       <LinkerFlags>-lz -lc++ -lsqlite3 -ObjC</LinkerFlags>
+      <WeakFrameworks>AdServices iAd</WeakFrameworks>
     </NativeReference>
-    <NativeReference Include="Libs\libYandexMobileMetricaCrashes-$(NativeAppMetricaSdkVersion).a">
-      <Kind>Static</Kind>
-      <Frameworks>SystemConfiguration Security UIKit Foundation CoreTelephony CoreLocation CoreGraphics AdSupport</Frameworks>
+    <NativeReference Include="Libs/YandexMobileMetricaCrashes.xcframework/ios-arm64_armv7/YandexMobileMetricaCrashes.framework">
+      <Kind>Framework</Kind>
       <ForceLoad>True</ForceLoad>
-      <WeakFrameworks>iAd</WeakFrameworks>
       <LinkerFlags>-lz -lc++ -lsqlite3 -ObjC</LinkerFlags>
+      <WeakFrameworks>iAd AdServices</WeakFrameworks>
+      <Frameworks>SystemConfiguration Security UIKit Foundation CoreTelephony CoreLocation CoreGraphics AdSupport</Frameworks>
     </NativeReference>
   </ItemGroup>
   <ItemGroup>
