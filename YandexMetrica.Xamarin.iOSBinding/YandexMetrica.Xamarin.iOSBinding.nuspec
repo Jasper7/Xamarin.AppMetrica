@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>Xamarin.AppMetrica.iOS</id>
+    <version>4.5.0.4</version>
+    <authors>Alekseev Aleksandr, Entdark</authors>
+    <owners>Aleksandr Alekseev</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>AppMetrica library for Xamarin iOS</description>
+    <releaseNotes> Update AppMetrica iOS to 4.5.0 version, support only Device</releaseNotes>
+    <copyright>Alekseev Aleksandr</copyright>
+    <tags>yandex,metrica,appmetrica,яндекс,аппметрика,метрика,analytics,яндекс.метрика,sdk,ios</tags>
+    <iconUrl>https://avatars.mds.yandex.net/get-adv/50995/2a00000162aee397ec2a1e15f59de1a75163/orig</iconUrl>
+<projectUrl>https://github.com/Jasper7/Xamarin.AppMetrica</projectUrl>
+  </metadata>
+  <files>
+    <file src="bin\Release\*.*" exclude="bin\**\mscorlib.dll" target="lib/xamarinios10" />
+  </files>
+</package>
