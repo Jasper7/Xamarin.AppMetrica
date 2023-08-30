@@ -95,7 +95,7 @@ namespace YandexMetricaIOS
 
         public IYandexMetricaUserProfileUpdate WithValueReset()
         {
-            return new YandexMetricaUserProfileUpdateImplementation(_native.WithValueReset());
+            return new YandexMetricaUserProfileUpdateImplementation(_native.WithValueReset);
         }
     }
 
@@ -115,7 +115,7 @@ namespace YandexMetricaIOS
 
         public IYandexMetricaUserProfileUpdate WithValueReset()
         {
-            return new YandexMetricaUserProfileUpdateImplementation(_native.WithValueReset());
+            return new YandexMetricaUserProfileUpdateImplementation(_native.WithValueReset);
         }
 
         private YMMGenderType GetIOSGender(YandexMetricaGender gender)
@@ -148,7 +148,7 @@ namespace YandexMetricaIOS
 
         public IYandexMetricaUserProfileUpdate WithValueReset()
         {
-            return new YandexMetricaUserProfileUpdateImplementation(_native.WithValueReset());
+            return new YandexMetricaUserProfileUpdateImplementation(_native.WithValueReset);
         }
     }
 
@@ -168,7 +168,7 @@ namespace YandexMetricaIOS
 
         public IYandexMetricaUserProfileUpdate WithValueReset()
         {
-            return new YandexMetricaUserProfileUpdateImplementation(_native.WithValueReset());
+            return new YandexMetricaUserProfileUpdateImplementation(_native.WithValueReset);
         }
     }
 
@@ -193,7 +193,7 @@ namespace YandexMetricaIOS
 
         public IYandexMetricaUserProfileUpdate WithValueReset()
         {
-            return new YandexMetricaUserProfileUpdateImplementation(_native.WithValueReset());
+            return new YandexMetricaUserProfileUpdateImplementation(_native.WithValueReset);
         }
     }
 
@@ -233,7 +233,7 @@ namespace YandexMetricaIOS
 
         public IYandexMetricaUserProfileUpdate WithValueReset()
         {
-            return new YandexMetricaUserProfileUpdateImplementation(_native.WithValueReset());
+            return new YandexMetricaUserProfileUpdateImplementation(_native.WithValueReset);
         }
     }
 
@@ -258,7 +258,7 @@ namespace YandexMetricaIOS
 
         public IYandexMetricaUserProfileUpdate WithValueReset()
         {
-            return new YandexMetricaUserProfileUpdateImplementation(_native.WithValueReset());
+            return new YandexMetricaUserProfileUpdateImplementation(_native.WithValueReset);
         }
     }
 

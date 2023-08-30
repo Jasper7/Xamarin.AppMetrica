@@ -1,0 +1,37 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net7.0-android</TargetFramework>
+    <SupportedOSPlatformVersion>21</SupportedOSPlatformVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <IsBindingProject>true</IsBindingProject>
+    <AssemblyName>YandexMetrica.Identifiers.Xamarin.Android</AssemblyName>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PackageId>Xamarin.Identifiers.AppMetrica.Android</PackageId>
+    <PackageVersion>5.0.1</PackageVersion>
+    <Authors>Alekseev Aleksandr</Authors>
+    <Description>AppMetrica library for Xamarin Android</Description>
+    <Owners>Alekseev Aleksandr</Owners>
+    <PackageProjectUrl>https://github.com/Jasper7/Xamarin.AppMetrica</PackageProjectUrl>
+    <PackageReleaseNotes>Thanks Entdark developer for this release!
+
+Changes:
+ Update AppMetrica to 5.0.1 version</PackageReleaseNotes>
+    <PackageTags>yandex,metrica,appmetrica,яндекс,аппметрика,метрика,analytics,яндекс.метрика,sdk,ios</PackageTags>
+    <Title>AppMetrica Identifiers library for Xamarin Android</Title>
+    <PackOnBuild>true</PackOnBuild>
+    <PackageIconUrl>https://avatars.mds.yandex.net/get-adv/50995/2a00000162aee397ec2a1e15f59de1a75163/orig</PackageIconUrl>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+    <ReleaseVersion>4.0.0.2</ReleaseVersion>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Remove="LICENSE.txt" />
+    <None Remove="update-lib.sh" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Xamarin.Kotlin.StdLib" Version="1.4.32">
+    </PackageReference>
+  </ItemGroup>
+</Project>
