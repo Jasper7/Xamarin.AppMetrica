@@ -5,7 +5,7 @@
     <ImplicitUsings>true</ImplicitUsings>
     <IsBindingProject>true</IsBindingProject>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <NoBindingEmbedding>false</NoBindingEmbedding>
+    <NoBindingEmbedding>true</NoBindingEmbedding>
     <AssemblyName>YandexMetrica.Xamarin.iOS</AssemblyName>
     <NativeAppMetricaSdkVersion>4.5.0.2</NativeAppMetricaSdkVersion>
   </PropertyGroup>
@@ -38,14 +38,14 @@ Changes:
     <ObjcBindingCoreSource Include="StructsAndEnums.cs" />
   </ItemGroup>
   <ItemGroup>
-    <NativeReference Include="Libs/YandexMobileMetrica.xcframework/ios-arm64_armv7/YandexMobileMetrica.framework">
+    <NativeReference Include="Libs/YandexMobileMetrica.xcframework">
       <Kind>Framework</Kind>
       <ForceLoad>True</ForceLoad>
       <Frameworks>SystemConfiguration Security UIKit Foundation CoreTelephony CoreLocation CoreGraphics AdSupport</Frameworks>
       <LinkerFlags>-lz -lc++ -lsqlite3 -ObjC</LinkerFlags>
       <WeakFrameworks>AdServices iAd</WeakFrameworks>
     </NativeReference>
-    <NativeReference Include="Libs/YandexMobileMetricaCrashes.xcframework/ios-arm64_armv7/YandexMobileMetricaCrashes.framework">
+    <NativeReference Include="Libs/YandexMobileMetricaCrashes.xcframework">
       <Kind>Framework</Kind>
       <ForceLoad>True</ForceLoad>
       <LinkerFlags>-lz -lc++ -lsqlite3 -ObjC</LinkerFlags>
