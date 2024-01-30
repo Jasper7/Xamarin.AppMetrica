@@ -5,3 +5,4 @@ obj/
 .vs
 .DS_Store
 packages
+TelegramLib
