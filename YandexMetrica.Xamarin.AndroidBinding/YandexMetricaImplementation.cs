@@ -24,7 +24,7 @@ namespace YandexMetricaAndroid
             Com.Yandex.Metrica.YandexMetrica.Activate(context, config.ToAndroidMetricaConfig());
             EnableActivityAutoTracking(app);
 
-            YandexMetrica.RegisterImplementation(new YandexMetricaImplementation());
+            YandexMetricaPCL.YandexMetrica.RegisterImplementation(new YandexMetricaImplementation());
             YandexMetricaAttributeImplementation.Init();
             UpdateConfiguration(config);
         }
@@ -122,12 +122,12 @@ namespace YandexMetricaAndroid
             _action.Invoke(deviceID, null);
         }
 
-        public void OnError(Com.Yandex.Metrica.AppMetricaDeviceIDListenerReason reason)
+        public void OnError(Com.Yandex.Metrica.IAppMetricaDeviceIDListener.Reason reason)
         {
             _action.Invoke(null, RequestDeviceIDErrorFromAndroidReason(reason));
         }
 
-        private YandexAppMetricaRequestDeviceIDError? RequestDeviceIDErrorFromAndroidReason(Com.Yandex.Metrica.AppMetricaDeviceIDListenerReason reason)
+        private YandexAppMetricaRequestDeviceIDError? RequestDeviceIDErrorFromAndroidReason(Com.Yandex.Metrica.IAppMetricaDeviceIDListener.Reason reason)
         {
             if (reason == null)
             {
